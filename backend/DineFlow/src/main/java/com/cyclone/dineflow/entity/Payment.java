@@ -26,8 +26,9 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false, columnDefinition = "CHAR(36)")
-    private String orderId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false, columnDefinition = "CHAR(36)", name = "orderId")
+    private Orders order;
 
     @Column(nullable = false)
     private Integer amount;

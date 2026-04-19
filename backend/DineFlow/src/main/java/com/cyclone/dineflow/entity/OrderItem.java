@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * [Detailed description of the class's responsibility]
  * * @author 2480010
@@ -21,14 +23,17 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false,  columnDefinition = "CHAR(36)")
-    private String orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false,  columnDefinition = "CHAR(36)", name = "orderId")
+    private Orders order;
 
-    @Column(nullable = false,  columnDefinition = "CHAR(36)")
-    private String menuItemId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false,  columnDefinition = "CHAR(36)", name = "menuItemId")
+    private MenuItem menuItem;
 
-    @Column(nullable = false,  columnDefinition = "CHAR(36)")
-    private String variantId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false,  columnDefinition = "CHAR(36)", name = "variantId")
+    private MenuItemVariant variant;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -41,4 +46,12 @@ public class OrderItem {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderItemStatus status = OrderItemStatus.PENDING;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "order_item_addon",
+            joinColumns = @JoinColumn(name = "order_item_id"),
+            inverseJoinColumns = @JoinColumn(name = "add_on_id")
+    )
+    private List<AddOn> addOns;
 }

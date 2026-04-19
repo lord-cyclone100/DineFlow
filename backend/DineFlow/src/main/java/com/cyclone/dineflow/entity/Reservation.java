@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -25,14 +26,17 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false,  columnDefinition = "CHAR(36)")
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false,  columnDefinition = "CHAR(36)", name = "userId")
+    private User user;
 
-    @Column(nullable = false,  columnDefinition = "CHAR(36)")
-    private String tableId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false,  columnDefinition = "CHAR(36)", name = "tableId")
+    private RestaurantTable table;
 
-    @Column(nullable = false,  columnDefinition = "CHAR(36)")
-    private String branchId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false,  columnDefinition = "CHAR(36)", name = "branchId")
+    private Branch branch;
 
     @Column(nullable = false)
     private Integer guestCount;

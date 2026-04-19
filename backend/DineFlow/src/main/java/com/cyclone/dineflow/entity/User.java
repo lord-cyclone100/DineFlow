@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -54,4 +55,21 @@ public class User {
 
     @CreationTimestamp
     private  LocalDateTime updatedAt;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<RefreshToken> refreshTokens;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Roles> roles;
+
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "user")
+    private List<Orders> orders;
 }

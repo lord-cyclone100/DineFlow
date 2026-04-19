@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -22,8 +23,9 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false,  columnDefinition = "CHAR(36)")
-    private String restaurantId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurantId", nullable = false,  columnDefinition = "CHAR(36)")
+    private Restaurant restaurant;
 
     @Column(nullable = false)
     private String name;
@@ -41,4 +43,16 @@ public class Branch {
 
     @Column(nullable = false)
     private LocalTime closeTime;
+
+    @OneToMany(mappedBy = "branch")
+    private List<Category> categories;
+
+    @OneToMany(mappedBy = "branch")
+    private List<RestaurantTable> restaurantTables;
+
+    @OneToMany(mappedBy = "branch")
+    private List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "branch")
+    private List<Orders> orders;
 }

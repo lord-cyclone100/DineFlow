@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * [Detailed description of the class's responsibility]
  * * @author 2480010
@@ -21,8 +23,9 @@ public class RestaurantTable {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false,  columnDefinition = "CHAR(36)")
-    private String branchId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false,  columnDefinition = "CHAR(36)", name = "branchId")
+    private Branch branch;
 
     @Column(nullable = false)
     private String tableNumber;
@@ -35,4 +38,10 @@ public class RestaurantTable {
     private TableLocation location;
 
     private boolean isActive = true;
+
+    @OneToMany(mappedBy = "table")
+    private List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "table")
+    private List<Orders> orders;
 }

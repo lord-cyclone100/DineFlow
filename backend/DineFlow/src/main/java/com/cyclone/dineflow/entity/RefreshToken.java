@@ -23,8 +23,9 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false, columnDefinition = "CHAR(36)")
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", nullable = false, columnDefinition = "CHAR(36)")
+    private User user;
 
     @Column(nullable = false,  unique = true)
     private String token;

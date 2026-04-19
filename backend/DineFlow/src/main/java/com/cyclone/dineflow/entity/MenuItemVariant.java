@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * [Detailed description of the class's responsibility]
  * * @author 2480010
@@ -19,11 +21,15 @@ public class MenuItemVariant {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false, columnDefinition = "CHAR(36)")
-    private String menuItemId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, columnDefinition = "CHAR(36)", name = "menuItemId")
+    private MenuItem menuItem;
 
     @Column(nullable = false)
     private String name;
 
     private Integer extraPrice = 0;
+
+    @OneToMany(mappedBy = "variant")
+    private List<OrderItem> orderItemVariants;
 }

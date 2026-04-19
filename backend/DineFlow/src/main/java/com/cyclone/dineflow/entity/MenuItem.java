@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -24,8 +25,9 @@ public class MenuItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false, columnDefinition = "CHAR(36)")
-    private String categoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, columnDefinition = "CHAR(36)", name = "categoryId")
+    private Category category;
 
     @Column(nullable = false)
     private String name;
@@ -48,4 +50,13 @@ public class MenuItem {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "menuItem")
+    private List<MenuItemVariant> menuItemVariants;
+
+    @OneToMany(mappedBy = "menuItem")
+    private List<AddOn> addOns;
+
+    @OneToMany(mappedBy = "menuItem")
+    private List<OrderItem> orderItems;
 }

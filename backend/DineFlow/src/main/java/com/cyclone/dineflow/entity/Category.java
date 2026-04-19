@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * [Detailed description of the class's responsibility]
  * * @author 2480010
@@ -21,8 +23,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false, columnDefinition = "CHAR(36)")
-    private String branchId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, columnDefinition = "CHAR(36)", name = "branchId")
+    private Branch branch;
 
     @Column(nullable = false)
     private String name;
@@ -32,4 +35,7 @@ public class Category {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CategoryActive isActive = CategoryActive.ACTIVE;
+
+    @OneToMany(mappedBy = "category")
+    private List<MenuItem> menuItems;
 }

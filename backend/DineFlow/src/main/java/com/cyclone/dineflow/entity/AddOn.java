@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * [Detailed description of the class's responsibility]
  * * @author 2480010
@@ -19,12 +21,16 @@ public class AddOn {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(columnDefinition = "CHAR(36)", nullable = false)
-    private String menuItemId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(columnDefinition = "CHAR(36)", nullable = false, name = "menuItemId")
+    private MenuItem menuItem;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private Integer extraPrice = 0;
+
+    @ManyToMany(mappedBy = "addOns")
+    private List<OrderItem> orderItemId;
 }
