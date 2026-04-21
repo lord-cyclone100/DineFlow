@@ -4,6 +4,8 @@ import com.cyclone.dineflow.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * [Detailed description of the class's responsibility]
  * * @author 2480010
@@ -13,4 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
+
+    Optional<User> findByEmail(String email);
 }

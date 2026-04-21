@@ -5,11 +5,11 @@ CREATE TABLE IF NOT EXISTS `user`(
     name varchar(50) NOT NULL,
     email varchar(100) UNIQUE NOT NULL,
     password varchar(255) NOT NULL,
-    phoneNumber varchar(20) NOT NULL,
+    phone_number varchar(20) NOT NULL,
     status ENUM('ACTIVE', 'SUSPENDED') DEFAULT 'ACTIVE' NOT NULL,
-    provider ENUM('LOCAL', 'GOOGLE') NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    provider ENUM('LOCAL', 'GOOGLE') NOT NULL DEFAULT 'LOCAL',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Roles Lookup Table
@@ -30,8 +30,8 @@ CREATE TABLE iF NOT EXISTS `refresh_token`(
     id varchar(36) PRIMARY KEY DEFAULT (UUID()),
     user_id char(36) NOT NULL,
     token varchar(512) UNIQUE,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expiresAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 
@@ -40,8 +40,8 @@ CREATE TABLE iF NOT EXISTS `refresh_token`(
 CREATE TABLE IF NOT EXISTS `restaurant`(
     id varchar(36) PRIMARY KEY DEFAULT (UUID()),
     name varchar(150) NOT NULL,
-    cuisineType varchar(100) NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    cuisine_type varchar(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Branch Table
@@ -51,9 +51,9 @@ CREATE TABLE IF NOT EXISTS `branch`(
     name varchar(150) NOT NULL,
     address text NOT NULL,
     city varchar(100),
-    phoneNumber varchar(20) NOT NULL UNIQUE,
-    openTime TIME,
-    closeTime TIME
+    phone_number varchar(20) NOT NULL UNIQUE,
+    open_time TIME,
+    close_time TIME
 );
 
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `category`(
     branch_id char(36) NOT NULL,
     name varchar(100) NOT NULL,
     description text,
-    isActive ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE' NOT NULL
+    is_active ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE' NOT NULL
 );
 
 -- Menu Item Table
@@ -73,11 +73,11 @@ CREATE TABLE IF NOT EXISTS `menu_item`(
     category_id char(36) NOT NULL,
     name VARCHAR(150) NOT NULL,
     description text,
-    basePrice int,
-    menuCategory ENUM('VEGETARIAN', 'NONVEGETARIAN', 'EGGETARIAN') NOT NULL,
-    menuAvailability ENUM('AVAILABLE', 'UNAVAILABLE') DEFAULT 'AVAILABLE' NOT NULL,
-    preparationTimeInMinutes int NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    base_price int,
+    menu_category ENUM('VEGETARIAN', 'NONVEGETARIAN', 'EGGETARIAN') NOT NULL,
+    menu_availability ENUM('AVAILABLE', 'UNAVAILABLE') DEFAULT 'AVAILABLE' NOT NULL,
+    preparation_time_in_minutes int NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Menu Item Variant Table
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `menu_item_variant`(
     id varchar(36) PRIMARY KEY DEFAULT (UUID()),
     menu_item_id char(36) NOT NULL,
     name varchar(100) NOT NULL,
-    extraPrice int DEFAULT 0
+    extra_price int DEFAULT 0
 );
 
 -- Add On Table
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `add_on`(
     id varchar(36) PRIMARY KEY DEFAULT (UUID()),
     menu_item_id char(36) NOT NULL,
     name varchar(100) NOT NULL,
-    extraPrice int DEFAULT 0
+    extra_price int DEFAULT 0
 );
 
 
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `reservation`(
     reservation_time TIME,
     status ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED') DEFAULT 'PENDING' NOT NULL,
     special_notes text,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -138,8 +138,8 @@ CREATE TABLE IF NOT EXISTS `orders`(
     final_amount int NOT NULL,
     special_instructions text,
     delivery_address text,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Order Item Table
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `order_item`(
     quantity int NOT NULL,
     unit_price int NOT NULL,
     notes text,
-    item_status ENUM('PENDING', 'PREPARING', 'READY') DEFAULT 'PENDING' NOT NULL
+    status ENUM('PENDING', 'PREPARING', 'READY') DEFAULT 'PENDING' NOT NULL
 );
 
 -- ============ Payments ============
@@ -165,5 +165,5 @@ CREATE TABLE IF NOT EXISTS `payment`(
     transaction_id VARCHAR(255),
     razorpay_order_id VARCHAR(255),
     paid_at TIME,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

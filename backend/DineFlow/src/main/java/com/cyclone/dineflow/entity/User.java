@@ -4,9 +4,7 @@ import com.cyclone.dineflow.entity.data.UserProvider;
 import com.cyclone.dineflow.entity.data.UserRoles;
 import com.cyclone.dineflow.entity.data.UserStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -21,8 +19,9 @@ import java.util.List;
  */
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -43,11 +42,13 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserProvider provider;
+    @Builder.Default
+    private UserProvider provider = UserProvider.LOCAL;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserStatus status;
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
 
     @CreationTimestamp
     @Column(updatable = false)

@@ -1,8 +1,11 @@
 package com.cyclone.dineflow.repository;
 
 import com.cyclone.dineflow.entity.Roles;
+import com.cyclone.dineflow.entity.data.UserRoles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -12,5 +15,6 @@ import org.springframework.stereotype.Repository;
  * @since 19-04-2026
  */
 @Repository
-public interface RolesRepository extends JpaRepository<Roles, String> {
+public interface RolesRepository extends JpaRepository<Roles, Integer> {
+    Optional<Roles> findByRoleName(UserRoles roleName);
 }
