@@ -33,10 +33,10 @@ public class AuthController {
         return ResponseEntity.ok(authService.loginUser(userRequestDto));
     }
 
-    @PostMapping("/auth/refresh")
-    public ResponseEntity<LoginResponseDto> refreshUser(@RequestBody LoginRequestDto userRequestDto) {
-
-    }
+//    @PostMapping("/auth/refresh")
+//    public ResponseEntity<LoginResponseDto> refreshUser(@RequestBody LoginRequestDto userRequestDto) {
+//
+//    }
 
     @GetMapping("/get")
     public String printHello(){
