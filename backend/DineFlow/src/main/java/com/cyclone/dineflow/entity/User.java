@@ -34,10 +34,10 @@ public class User {
     @Column(columnDefinition = "VARCHAR(100)", nullable = false, unique = true)
     private String email;
 
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(255)")
     private String password;
 
-    @Column(nullable = false,  unique = true, length = 20)
+    @Column(unique = true, length = 20)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)

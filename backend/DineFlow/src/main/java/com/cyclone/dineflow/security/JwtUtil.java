@@ -1,9 +1,12 @@
 package com.cyclone.dineflow.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -58,5 +61,15 @@ public class JwtUtil {
 
     public String buildRefreshToken(String userId, List<String> roles, TokenType tokenType){
         return buildToken(userId,roles,TokenType.REFRESH);
+    }
+
+    public UserPrincipal extractUserFromToken(String token){
+
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
+//        Integer str = claims.getBody().get("type", String.class);
+        String userId =claims.getBody().get("userId", String.class);
+        List<String> roles = claims.getBody().get("role", List.class);
+        List<SimpleGrantedAuthority> grantedRoleAuthorities = roles.stream().map((role)->new SimpleGrantedAuthority("ROLE_" + role.toUpperCase())).toList();
+        return new UserPrincipal(userId,roles,grantedRoleAuthorities);
     }
 }

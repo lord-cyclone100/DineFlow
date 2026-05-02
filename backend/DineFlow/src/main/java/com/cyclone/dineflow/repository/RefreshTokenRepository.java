@@ -1,8 +1,11 @@
 package com.cyclone.dineflow.repository;
 
 import com.cyclone.dineflow.entity.RefreshToken;
+import com.cyclone.dineflow.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -13,4 +16,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, String> {
+    void deleteByUser(User user);
 }

@@ -1,5 +1,6 @@
 package com.cyclone.dineflow.service.impl;
 
+import com.cyclone.dineflow.dto.requestdto.ChangePasswordRequestDto;
 import com.cyclone.dineflow.dto.requestdto.LoginRequestDto;
 import com.cyclone.dineflow.dto.requestdto.RegisterRequestDto;
 import com.cyclone.dineflow.dto.responsedto.LoginResponseDto;
@@ -14,9 +15,12 @@ import com.cyclone.dineflow.repository.RolesRepository;
 import com.cyclone.dineflow.repository.UserRepository;
 import com.cyclone.dineflow.security.JwtUtil;
 import com.cyclone.dineflow.security.TokenType;
+import com.cyclone.dineflow.security.UserPrincipal;
 import com.cyclone.dineflow.service.AuthService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final RolesRepository rolesRepository;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public RegisterResponseDto registerUser(RegisterRequestDto userRequestDto) {
@@ -50,10 +55,10 @@ public class AuthServiceImpl implements AuthService {
 
         Roles roles = rolesRepository.findByRoleName(UserRoles.CUSTOMER).orElseThrow(()->new RuntimeException("Role not found"));
 
-        User user =  User.builder()
+        User user = User.builder()
                 .name(userRequestDto.name())
                 .email(userRequestDto.email())
-                .password(userRequestDto.password())
+                .password(passwordEncoder.encode(userRequestDto.password()))
                 .phoneNumber(userRequestDto.phoneNumber())
                 .roles(List.of(roles))
                 .build();
@@ -65,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponseDto loginUser(LoginRequestDto userRequestDto) {
         User foundUser = userRepository.findByEmail(userRequestDto.email()).orElseThrow(() -> new RuntimeException("User not found"));
-        if(!foundUser.getPassword().equals(userRequestDto.password())){
+        if(!passwordEncoder.matches(userRequestDto.password(), foundUser.getPassword())){
             throw new RuntimeException("Passwords don't match");
         }
 
@@ -86,5 +91,70 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenRepository.save(refreshTokenRecord);
 
         return new LoginResponseDto(accessToken, refreshToken, type);
+    }
+
+    @Override
+    public LoginResponseDto refreshUser(UserPrincipal principal) {
+        String userId = principal.userId();
+        List<String> userRoles = principal.roles();
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        String accessToken = jwtUtil.buildAccessToken(foundUser.getId(),userRoles, TokenType.ACCESS);
+        String refreshToken = jwtUtil.buildRefreshToken(foundUser.getId(),userRoles, TokenType.REFRESH);
+
+        String type = "Bearer";
+
+        RefreshToken refreshTokenRecord =  RefreshToken.builder()
+                .token(refreshToken)
+                .user(foundUser)
+                .build();
+
+        refreshTokenRepository.save(refreshTokenRecord);
+
+        return new LoginResponseDto(accessToken, refreshToken, type);
+    }
+
+    @Override
+    public RegisterResponseDto getCurrentUser(UserPrincipal principal) {
+        String userId = principal.userId();
+
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return UserResponseDtoMapper.toDto(foundUser);
+    }
+
+    @Override
+    public RegisterResponseDto updateCurrentUserDetails(UserPrincipal principal, RegisterRequestDto userRequestDto) {
+        String userId = principal.userId();
+
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        foundUser.setName(userRequestDto.name());
+        foundUser.setEmail(userRequestDto.email());
+        foundUser.setPhoneNumber(userRequestDto.phoneNumber());
+
+        userRepository.save(foundUser);
+
+        return UserResponseDtoMapper.toDto(foundUser);
+    }
+
+    @Override
+    public String changePassword(UserPrincipal principal, ChangePasswordRequestDto password) {
+        String userId = principal.userId();
+
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        foundUser.setPassword(passwordEncoder.encode(password.password()));
+        userRepository.save(foundUser);
+        return "Password changed successfully";
+    }
+
+    @Override
+    @Transactional
+    public String logoutUser(UserPrincipal principal) {
+        String userId = principal.userId();
+
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        refreshTokenRepository.deleteByUser(foundUser);
+        return "Refresh Tokens deleted successfully";
     }
 }

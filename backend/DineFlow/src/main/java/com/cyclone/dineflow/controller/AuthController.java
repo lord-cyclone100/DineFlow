@@ -1,12 +1,15 @@
 package com.cyclone.dineflow.controller;
 
+import com.cyclone.dineflow.dto.requestdto.ChangePasswordRequestDto;
 import com.cyclone.dineflow.dto.requestdto.LoginRequestDto;
 import com.cyclone.dineflow.dto.requestdto.RegisterRequestDto;
 import com.cyclone.dineflow.dto.responsedto.LoginResponseDto;
 import com.cyclone.dineflow.dto.responsedto.RegisterResponseDto;
+import com.cyclone.dineflow.security.UserPrincipal;
 import com.cyclone.dineflow.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,13 +36,28 @@ public class AuthController {
         return ResponseEntity.ok(authService.loginUser(userRequestDto));
     }
 
-//    @PostMapping("/auth/refresh")
-//    public ResponseEntity<LoginResponseDto> refreshUser(@RequestBody LoginRequestDto userRequestDto) {
-//
-//    }
+    @PostMapping("/auth/refresh")
+    public ResponseEntity<LoginResponseDto> refreshUser(@AuthenticationPrincipal UserPrincipal principal) {
+        return ResponseEntity.ok(authService.refreshUser(principal));
+    }
 
-    @GetMapping("/get")
-    public String printHello(){
-        return "Hello World";
+    @GetMapping("/auth/me")
+    public ResponseEntity<RegisterResponseDto> getCurrrentUser(@AuthenticationPrincipal UserPrincipal principal) {
+        return ResponseEntity.ok(authService.getCurrentUser(principal));
+    }
+
+    @PutMapping("/auth/me")
+    public ResponseEntity<RegisterResponseDto> updateCurrrentUserDetails(@AuthenticationPrincipal UserPrincipal principal, @RequestBody RegisterRequestDto userRequestDto) {
+        return ResponseEntity.ok(authService.updateCurrentUserDetails(principal, userRequestDto));
+    }
+
+    @PatchMapping("/auth/changepassword")
+    public ResponseEntity<String> changePassword(@AuthenticationPrincipal UserPrincipal principal, @RequestBody ChangePasswordRequestDto password){
+        return ResponseEntity.ok(authService.changePassword(principal, password));
+    }
+
+    @PostMapping("/auth/logout")
+    public ResponseEntity<String> logoutUser(@AuthenticationPrincipal UserPrincipal principal){
+        return ResponseEntity.ok(authService.logoutUser(principal));
     }
 }

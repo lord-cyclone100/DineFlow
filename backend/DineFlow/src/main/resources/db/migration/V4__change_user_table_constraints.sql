@@ -1,0 +1,3 @@
+ALTER TABLE user
+MODIFY password VARCHAR(255) NULL,
+MODIFY phone_number VARCHAR(255) NULL;
