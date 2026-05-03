@@ -1,9 +1,11 @@
 package com.cyclone.dineflow.entity;
 
 import com.cyclone.dineflow.entity.data.UserRoles;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class Roles {
     private UserRoles roleName;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonBackReference
     private List<User> userId;
 
     public Roles (UserRoles roleName) {

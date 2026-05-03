@@ -1,10 +1,13 @@
 package com.cyclone.dineflow.controller;
 
+import com.cyclone.dineflow.dto.requestdto.ChangeRolesRequestDto;
+import com.cyclone.dineflow.dto.responsedto.ChangeRolesResponseDto;
 import com.cyclone.dineflow.dto.responsedto.UserResponseDto;
 import com.cyclone.dineflow.entity.User;
 import com.cyclone.dineflow.entity.data.UserStatus;
 import com.cyclone.dineflow.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,5 +45,10 @@ public class UserController {
     @DeleteMapping("/admin/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable String id){
         return ResponseEntity.ok(userService.deleteUser(id));
+    }
+
+    @PatchMapping("/admin/users/{id}/roles")
+    public ResponseEntity<ChangeRolesResponseDto> changeUserRoles(@PathVariable String id, @RequestBody ChangeRolesRequestDto roleChangeArr){
+        return ResponseEntity.ok(userService.changeUserRoles(id, roleChangeArr));
     }
 }

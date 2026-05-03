@@ -1,9 +1,13 @@
 package com.cyclone.dineflow.service.impl;
 
+import com.cyclone.dineflow.dto.requestdto.ChangeRolesRequestDto;
+import com.cyclone.dineflow.dto.responsedto.ChangeRolesResponseDto;
 import com.cyclone.dineflow.dto.responsedto.UserResponseDto;
 import com.cyclone.dineflow.dtomapper.ViewUserDtoMapper;
+import com.cyclone.dineflow.entity.Roles;
 import com.cyclone.dineflow.entity.User;
 import com.cyclone.dineflow.entity.data.UserStatus;
+import com.cyclone.dineflow.repository.RolesRepository;
 import com.cyclone.dineflow.repository.UserRepository;
 import com.cyclone.dineflow.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final RolesRepository rolesRepository;
 
 
     @Override
@@ -49,5 +54,22 @@ public class UserServiceImpl implements UserService {
         User foundUser = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found!"));
         userRepository.delete(foundUser);
         return "User Deleted";
+    }
+
+    @Override
+    public ChangeRolesResponseDto changeUserRoles(String id, ChangeRolesRequestDto roleChangeArr) {
+        User foundUser = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found!"));
+
+        if(roleChangeArr.roles() == null || roleChangeArr.roles().isEmpty()){
+            throw new RuntimeException("At least one role is required");
+        }
+
+        List<Roles> newRoles = roleChangeArr.roles().stream().map(role->rolesRepository.findByRoleName(role).orElseThrow(()-> new RuntimeException("Role not found"))).toList();
+
+        foundUser.getRoles().clear();
+        foundUser.getRoles().addAll(newRoles);
+
+        userRepository.save(foundUser);
+        return new ChangeRolesResponseDto(foundUser.getName(),newRoles);
     }
 }

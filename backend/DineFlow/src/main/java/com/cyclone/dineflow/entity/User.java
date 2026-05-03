@@ -3,6 +3,7 @@ package com.cyclone.dineflow.entity;
 import com.cyclone.dineflow.entity.data.UserProvider;
 import com.cyclone.dineflow.entity.data.UserRoles;
 import com.cyclone.dineflow.entity.data.UserStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -66,6 +67,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonManagedReference
     private List<Roles> roles;
 
     @OneToMany(mappedBy = "user")

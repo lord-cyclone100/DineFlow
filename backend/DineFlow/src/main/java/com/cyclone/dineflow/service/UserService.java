@@ -1,5 +1,7 @@
 package com.cyclone.dineflow.service;
 
+import com.cyclone.dineflow.dto.requestdto.ChangeRolesRequestDto;
+import com.cyclone.dineflow.dto.responsedto.ChangeRolesResponseDto;
 import com.cyclone.dineflow.dto.responsedto.UserResponseDto;
 import com.cyclone.dineflow.entity.data.UserStatus;
 
@@ -20,4 +22,6 @@ public interface UserService {
     String updateUserStatus(String id, UserStatus userStatus);
 
     String deleteUser(String id);
+
+    ChangeRolesResponseDto changeUserRoles(String id, ChangeRolesRequestDto roleChangeArr);
 }
