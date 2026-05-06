@@ -608,8 +608,275 @@
 				{
 					"name": "delete branch",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8050/api/v1/branches/6550c95a-01b3-4647-a69e-9b32efcdb156",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"v1",
+								"branches",
+								"6550c95a-01b3-4647-a69e-9b32efcdb156"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "create category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8050/api/v1/branches/056e43f2-4b64-400c-9d4c-3023ab6d842f/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"v1",
+								"branches",
+								"056e43f2-4b64-400c-9d4c-3023ab6d842f",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all categories",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8050/api/v1/branches/056e43f2-4b64-400c-9d4c-3023ab6d842f/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"v1",
+								"branches",
+								"056e43f2-4b64-400c-9d4c-3023ab6d842f",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get particular category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"v1",
+								"categories",
+								"ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update particular category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Best quality starters to start the meal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"v1",
+								"categories",
+								"ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete particular category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"v1",
+								"categories",
+								"ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggle category status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8050/api/v1/categories/a79033a4-dada-4549-86d9-ca96b645954d/toggle-active?status=ACTIVE",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8050",
+							"path": [
+								"api",
+								"v1",
+								"categories",
+								"a79033a4-dada-4549-86d9-ca96b645954d",
+								"toggle-active"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "ACTIVE"
+								}
+							]
+						}
 					},
 					"response": []
 				}

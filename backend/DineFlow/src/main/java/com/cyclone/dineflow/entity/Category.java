@@ -2,6 +2,8 @@ package com.cyclone.dineflow.entity;
 
 import com.cyclone.dineflow.entity.data.CategoryActive;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +19,8 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Category {
 
     @Id
@@ -34,6 +38,7 @@ public class Category {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private CategoryActive isActive = CategoryActive.ACTIVE;
 
     @OneToMany(mappedBy = "category")
