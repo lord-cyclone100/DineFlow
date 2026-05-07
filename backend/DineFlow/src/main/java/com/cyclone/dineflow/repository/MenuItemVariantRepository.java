@@ -4,6 +4,8 @@ import com.cyclone.dineflow.entity.MenuItemVariant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * [Detailed description of the class's responsibility]
  * * @author 2480010
@@ -13,4 +15,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface MenuItemVariantRepository extends JpaRepository<MenuItemVariant, String> {
+    Optional<MenuItemVariant> findByName(String name);
 }
