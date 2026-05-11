@@ -37,9 +37,8 @@ public class AddOnController {
         return ResponseEntity.ok(addOnService.updateAddOn(id, addOnRequestDto));
     }
 
-
     @DeleteMapping("/addons/{id}")
     public ResponseEntity<String> deleteAddOn(@PathVariable String id) {
-        return ResponseEntity.ok(addOnService.deleteAddOn(id);
+        return ResponseEntity.ok(addOnService.deleteAddOn(id));
     }
 }

@@ -7,5 +7,8 @@ package com.cyclone.dineflow.dto.requestdto;
  * @version 1.0
  * @since 08-05-2026
  */
-public record AddOnRequestDto() {
-}
+public record AddOnRequestDto(
+        String name,
+        int extraPrice
+)
+{}
