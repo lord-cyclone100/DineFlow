@@ -1,8 +1,11 @@
 package com.cyclone.dineflow.repository;
 
+import com.cyclone.dineflow.entity.Branch;
 import com.cyclone.dineflow.entity.RestaurantTable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -13,4 +16,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RestaurantTableRepository extends JpaRepository<RestaurantTable, String> {
+    Optional<RestaurantTable> findByTableNumber(String tableNumber);
 }
