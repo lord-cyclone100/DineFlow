@@ -1,896 +1,1249 @@
 {
-	"info": {
-		"_postman_id": "d4defa41-19db-4896-8dff-045293855b91",
-		"name": "DineFlow",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "52854131",
-		"_collection_link": "https://sangneel-cts-2480010-5200116.postman.co/workspace/Sangneel-Deb's-Workspace~cdde8d90-5e9a-4485-8dec-506fefce740e/collection/52854131-d4defa41-19db-4896-8dff-045293855b91?action=share&source=collection_link&creator=52854131"
-	},
-	"item": [
-		{
-			"name": "auth",
-			"item": [
-				{
-					"name": "register",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{attendeeToken}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Sangneel\",\r\n    \"email\":\"sangneel@dineflow.com\",\r\n    \"password\":\"sangneel\",\r\n    \"phoneNumber\":\"123456\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/auth/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test('Login successful', function() {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"if (pm.response.code === 200) {\r",
-									"    var res = pm.response.json();\r",
-									"    pm.collectionVariables.set('accessToken', res.accessToken);\r",
-									"    pm.collectionVariables.set('refreshToken', res.refreshToken);\r",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"sangneel@dineflow.com\",\r\n    \"password\": \"sangneel\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/auth/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "refresh",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"sangneel@dineflow.com\",\r\n    \"password\": \"sangneel\"\r\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/auth/refresh",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"refresh"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get current user",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"sangneel@dineflow.com\",\r\n    \"password\": \"sangneel\"\r\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/auth/me",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update current user",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Sangneel\",\r\n    \"email\":\"sangneel@dineflow.com\",\r\n    \"phoneNumber\": \"123456789\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/auth/me",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "change password",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"sangneel123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/auth/changepassword",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"changepassword"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "logout",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "user",
-			"item": [
-				{
-					"name": "fetch all users",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "fetch particular user",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "update user status",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8050/api/v1/admin/users/a45ecd80-0934-4347-a7fb-32bc874ae5d3/status?userStatus=SUSPENDED",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"users",
-								"a45ecd80-0934-4347-a7fb-32bc874ae5d3",
-								"status"
-							],
-							"query": [
-								{
-									"key": "userStatus",
-									"value": "SUSPENDED"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete user",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "update user roles",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"roles\": [\"CUSTOMER\", \"MANAGER\", \"KITCHEN\"]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/admin/users/57a6369b-6166-4765-acb7-a22f3742c1d5/roles",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"admin",
-								"users",
-								"57a6369b-6166-4765-acb7-a22f3742c1d5",
-								"roles"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "restaurant",
-			"item": [
-				{
-					"name": "create restaurant",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Dada Boudi Hotel\",\r\n    \"cuisineType\":\"Multicuisine\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/restaurants",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"restaurants"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all restaurants",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8050/api/v1/restaurants",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"restaurants"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get particular restaurant",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "update restaurant",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Konnagar Coffee House\",\r\n    \"cuisineType\":\"Coffee and Snacks\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/restaurants/32332250-dc62-4793-bed0-3cc3b371edf6",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"restaurants",
-								"32332250-dc62-4793-bed0-3cc3b371edf6"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete restaurant",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8050/api/v1/restaurants/87571ca7-b9fb-4b0f-adc7-3a8eb96f1e07",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"restaurants",
-								"87571ca7-b9fb-4b0f-adc7-3a8eb96f1e07"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "branch",
-			"item": [
-				{
-					"name": "create branch",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Sodepur\",\r\n    \"address\":\"89/45 Nonta Para\",\r\n    \"city\":\"Kolkata\",\r\n    \"phoneNumber\":\"9876547\",\r\n    \"openTime\":\"12:00\",\r\n    \"closeTime\":\"21:00\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/restaurants/b04d23d0-de85-4d6f-b1e7-b79d7ac04a39/branches",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"restaurants",
-								"b04d23d0-de85-4d6f-b1e7-b79d7ac04a39",
-								"branches"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all branches of a restaurant",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "get particular branch",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "update branch",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Sodepur\",\r\n    \"address\":\"89/45 Nonta Para\",\r\n    \"city\":\"Kolkata\",\r\n    \"phoneNumber\":\"123456\",\r\n    \"openTime\":\"11:00\",\r\n    \"closeTime\":\"21:30\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/branches/6550c95a-01b3-4647-a69e-9b32efcdb156",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"branches",
-								"6550c95a-01b3-4647-a69e-9b32efcdb156"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete branch",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8050/api/v1/branches/6550c95a-01b3-4647-a69e-9b32efcdb156",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"branches",
-								"6550c95a-01b3-4647-a69e-9b32efcdb156"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "category",
-			"item": [
-				{
-					"name": "create category",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/branches/056e43f2-4b64-400c-9d4c-3023ab6d842f/categories",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"branches",
-								"056e43f2-4b64-400c-9d4c-3023ab6d842f",
-								"categories"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all categories",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/branches/056e43f2-4b64-400c-9d4c-3023ab6d842f/categories",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"branches",
-								"056e43f2-4b64-400c-9d4c-3023ab6d842f",
-								"categories"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get particular category",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"categories",
-								"ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update particular category",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Best quality starters to start the meal\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"categories",
-								"ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete particular category",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"categories",
-								"ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "toggle category status",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8050/api/v1/categories/a79033a4-dada-4549-86d9-ca96b645954d/toggle-active?status=ACTIVE",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8050",
-							"path": [
-								"api",
-								"v1",
-								"categories",
-								"a79033a4-dada-4549-86d9-ca96b645954d",
-								"toggle-active"
-							],
-							"query": [
-								{
-									"key": "status",
-									"value": "ACTIVE"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"variable": [
-		{
-			"key": "accessToken",
-			"value": ""
-		},
-		{
-			"key": "refreshToken",
-			"value": ""
-		}
-	]
+  "info": {
+    "_postman_id": "ed5dbc13-8587-4794-9b32-f0c1b102f9be",
+    "name": "DineFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "36858121"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{attendeeToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Sangneel\",\r\n    \"email\":\"sangneel@dineflow.com\",\r\n    \"password\":\"sangneel\",\r\n    \"phoneNumber\":\"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login successful', function() {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "if (pm.response.code === 200) {\r",
+                  "    var res = pm.response.json();\r",
+                  "    pm.collectionVariables.set('accessToken', res.accessToken);\r",
+                  "    pm.collectionVariables.set('refreshToken', res.refreshToken);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"sangneel@dineflow.com\",\r\n    \"password\": \"sangneel\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refresh",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"sangneel@dineflow.com\",\r\n    \"password\": \"sangneel\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/auth/refresh",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get current user",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"sangneel@dineflow.com\",\r\n    \"password\": \"sangneel\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/auth/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update current user",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Sangneel\",\r\n    \"email\":\"sangneel@dineflow.com\",\r\n    \"phoneNumber\": \"123456789\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/auth/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "change password",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"password\": \"sangneel123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/auth/changepassword",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "changepassword"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "fetch all users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "fetch particular user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update user status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/admin/users/a45ecd80-0934-4347-a7fb-32bc874ae5d3/status?userStatus=SUSPENDED",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "users",
+                "a45ecd80-0934-4347-a7fb-32bc874ae5d3",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "userStatus",
+                  "value": "SUSPENDED"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update user roles",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"roles\": [\"CUSTOMER\", \"MANAGER\", \"KITCHEN\"]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/admin/users/57a6369b-6166-4765-acb7-a22f3742c1d5/roles",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "users",
+                "57a6369b-6166-4765-acb7-a22f3742c1d5",
+                "roles"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "restaurant",
+      "item": [
+        {
+          "name": "create restaurant",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Dada Boudi Hotel\",\r\n    \"cuisineType\":\"Multicuisine\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/restaurants",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "restaurants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all restaurants",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/restaurants",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "restaurants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get particular restaurant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update restaurant",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Konnagar Coffee House\",\r\n    \"cuisineType\":\"Coffee and Snacks\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/restaurants/32332250-dc62-4793-bed0-3cc3b371edf6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "32332250-dc62-4793-bed0-3cc3b371edf6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete restaurant",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/restaurants/87571ca7-b9fb-4b0f-adc7-3a8eb96f1e07",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "87571ca7-b9fb-4b0f-adc7-3a8eb96f1e07"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "branch",
+      "item": [
+        {
+          "name": "create branch",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Sodepur\",\r\n    \"address\":\"89/45 Nonta Para\",\r\n    \"city\":\"Kolkata\",\r\n    \"phoneNumber\":\"9876547\",\r\n    \"openTime\":\"12:00\",\r\n    \"closeTime\":\"21:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/restaurants/cb753e71-c535-45a9-aa3c-942bd5040217/branches",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "cb753e71-c535-45a9-aa3c-942bd5040217",
+                "branches"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all branches of a restaurant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get particular branch",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update branch",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Sodepur\",\r\n    \"address\":\"89/45 Nonta Para\",\r\n    \"city\":\"Kolkata\",\r\n    \"phoneNumber\":\"123456\",\r\n    \"openTime\":\"11:00\",\r\n    \"closeTime\":\"21:30\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/branches/6550c95a-01b3-4647-a69e-9b32efcdb156",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "branches",
+                "6550c95a-01b3-4647-a69e-9b32efcdb156"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete branch",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/branches/6550c95a-01b3-4647-a69e-9b32efcdb156",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "branches",
+                "6550c95a-01b3-4647-a69e-9b32efcdb156"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "category",
+      "item": [
+        {
+          "name": "create category",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/branches/056e43f2-4b64-400c-9d4c-3023ab6d842f/categories",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "branches",
+                "056e43f2-4b64-400c-9d4c-3023ab6d842f",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all categories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/branches/056e43f2-4b64-400c-9d4c-3023ab6d842f/categories",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "branches",
+                "056e43f2-4b64-400c-9d4c-3023ab6d842f",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get particular category",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Top quality starters to start the meal\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "categories",
+                "ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update particular category",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Starters\",\r\n    \"description\":\"Best quality starters to start the meal\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "categories",
+                "ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete particular category",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/categories/ad0dd04b-2893-40b7-b00a-cce45eb0f9a0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "categories",
+                "ad0dd04b-2893-40b7-b00a-cce45eb0f9a0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "toggle category status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/categories/a79033a4-dada-4549-86d9-ca96b645954d/toggle-active?status=ACTIVE",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "categories",
+                "a79033a4-dada-4549-86d9-ca96b645954d",
+                "toggle-active"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "reservation",
+      "item": [
+        {
+          "name": "create reservation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"tableId\":\"b94f02ea-89a3-49c9-8890-c87785f9695d\",\r\n    \"branchId\":\"5407fbe2-8fa5-4b29-a5d1-aec03e17fcce\",\r\n    \"guestCount\":5,\r\n    \"reservationDate\":\"2026-05-17\",\r\n    \"reservationTime\":\"18:00\",\r\n    \"specialNotes\":\"There should be enough space 2\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/reservations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "reservations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "view my reservations",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/reservations/my",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "reservations",
+                "my"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "view reservation by id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/reservations/637cfd9e-21df-4a17-850e-9a9f755c06b0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "reservations",
+                "637cfd9e-21df-4a17-850e-9a9f755c06b0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancel reservation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/reservations/637cfd9e-21df-4a17-850e-9a9f755c06b0/cancel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "reservations",
+                "637cfd9e-21df-4a17-850e-9a9f755c06b0",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "view reservations by branch",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/branches/5407fbe2-8fa5-4b29-a5d1-aec03e17fcce/reservations/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "branches",
+                "5407fbe2-8fa5-4b29-a5d1-aec03e17fcce",
+                "reservations",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "view reservations for today",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/branches/5407fbe2-8fa5-4b29-a5d1-aec03e17fcce/reservations/today",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "branches",
+                "5407fbe2-8fa5-4b29-a5d1-aec03e17fcce",
+                "reservations",
+                "today"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "confirm reservation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/reservations/9085cfd1-d1ef-4571-8b08-5da675518700/confirm",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "reservations",
+                "9085cfd1-d1ef-4571-8b08-5da675518700",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancel reservation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8050/api/v1/reservations/9085cfd1-d1ef-4571-8b08-5da675518700/cancel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "reservations",
+                "9085cfd1-d1ef-4571-8b08-5da675518700",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "item": [
+        {
+          "name": "create table",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"tableNumber\":\"TAB121\",\r\n    \"capacity\": 4,\r\n    \"tableLocation\": \"ROOFTOP\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/branches/5407fbe2-8fa5-4b29-a5d1-aec03e17fcce/tables",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "branches",
+                "5407fbe2-8fa5-4b29-a5d1-aec03e17fcce",
+                "tables"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    }
+  ]
 }

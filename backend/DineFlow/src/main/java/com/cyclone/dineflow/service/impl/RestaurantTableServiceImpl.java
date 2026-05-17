@@ -38,9 +38,11 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
             throw new RuntimeException("Restaurant table already exists");
         }
         RestaurantTable restaurantTable = RestaurantTable.builder()
+                .branch(foundBranch.get())
                 .tableNumber(restaurantTableRequestDto.tableNumber())
                 .capacity(restaurantTableRequestDto.capacity())
                 .location(restaurantTableRequestDto.tableLocation())
+                .isActive(true)
                 .build();
         restaurantTableRepository.save(restaurantTable);
         return RestaurantTableResponseDtoMapper.toDto(restaurantTable, "Table created successfully");

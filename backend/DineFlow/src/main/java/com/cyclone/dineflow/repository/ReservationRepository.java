@@ -4,6 +4,8 @@ import com.cyclone.dineflow.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * [Detailed description of the class's responsibility]
  * * @author 2480010
@@ -13,4 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, String> {
+    public List<Reservation> findAllByUserId(String userId);
+    public List<Reservation> findAllByBranchId(String branchId);
 }
