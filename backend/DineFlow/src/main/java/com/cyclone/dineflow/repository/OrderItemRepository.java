@@ -1,8 +1,11 @@
 package com.cyclone.dineflow.repository;
 
 import com.cyclone.dineflow.entity.OrderItem;
+import com.cyclone.dineflow.entity.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -13,4 +16,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, String> {
+    public List<OrderItem> findAllByOrderId(String orderId);
 }

@@ -23,17 +23,17 @@ public class MenuItemController {
 
     private final MenuItemService menuItemService;
 
-    @PostMapping("/categories{categoryId}/items")
-    public ResponseEntity<MenuItemResponseDto> createMenuItem(@RequestBody MenuItemRequestDto menuItemRequestDto, @PathVariable String categoryId) {
-        return ResponseEntity.ok(menuItemService.createMenuItem(menuItemRequestDto, categoryId));
-    }
+        @PostMapping("/categories/{categoryId}/items")
+        public ResponseEntity<MenuItemResponseDto> createMenuItem(@RequestBody MenuItemRequestDto menuItemRequestDto, @PathVariable String categoryId) {
+            return ResponseEntity.ok(menuItemService.createMenuItem(menuItemRequestDto, categoryId));
+        }
 
     @GetMapping("/branches/{branchId}/items")
     public ResponseEntity<List<MenuItemResponseDto>> getMenuItemsOfBranch(@PathVariable String branchId) {
         return ResponseEntity.ok(menuItemService.getMenuItemsOfBranch(branchId));
     }
 
-    @GetMapping("/categories{categoryId}/items")
+    @GetMapping("/categories/{categoryId}/items")
     public ResponseEntity<List<MenuItemResponseDto>> getMenuItemsOfCategory(@PathVariable String categoryId) {
         return ResponseEntity.ok(menuItemService.getMenuItemsOfCategory(categoryId));
     }

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public record MenuItemVariantResponseDto (
         String menuItemName,
         String variantName,
-        int extraPrice,
+        Integer extraPrice,
         String message
 )
 {}

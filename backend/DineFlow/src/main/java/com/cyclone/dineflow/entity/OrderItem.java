@@ -2,6 +2,8 @@ package com.cyclone.dineflow.entity;
 
 import com.cyclone.dineflow.entity.data.OrderItemStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +19,8 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OrderItem {
 
     @Id
@@ -45,6 +49,7 @@ public class OrderItem {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private OrderItemStatus status = OrderItemStatus.PENDING;
 
     @ManyToMany(fetch = FetchType.EAGER)

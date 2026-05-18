@@ -1,22 +1,18 @@
 package com.cyclone.dineflow.service.impl;
 
+import com.cyclone.dineflow.dto.requestdto.OrderItemRequestDto;
 import com.cyclone.dineflow.dto.requestdto.OrdersRequestDto;
 import com.cyclone.dineflow.dto.responsedto.OrdersResponseDto;
 import com.cyclone.dineflow.dtomapper.OrdersResponseDtoMapper;
-import com.cyclone.dineflow.entity.Branch;
-import com.cyclone.dineflow.entity.Orders;
-import com.cyclone.dineflow.entity.RestaurantTable;
-import com.cyclone.dineflow.entity.User;
+import com.cyclone.dineflow.entity.*;
 import com.cyclone.dineflow.entity.data.OrderStatus;
-import com.cyclone.dineflow.repository.BranchRepository;
-import com.cyclone.dineflow.repository.OrdersRepository;
-import com.cyclone.dineflow.repository.RestaurantTableRepository;
-import com.cyclone.dineflow.repository.UserRepository;
+import com.cyclone.dineflow.repository.*;
 import com.cyclone.dineflow.security.UserPrincipal;
 import com.cyclone.dineflow.service.OrdersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,6 +23,9 @@ public class OrdersServiceImpl implements OrdersService {
     private final UserRepository userRepository;
     private final BranchRepository branchRepository;
     private final RestaurantTableRepository restaurantTableRepository;
+    private final MenuItemRepository menuItemRepository;
+    private final MenuItemVariantRepository menuItemVariantRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     public OrdersResponseDto placeOrder(UserPrincipal userPrincipal, OrdersRequestDto ordersRequestDto) {
@@ -35,20 +34,46 @@ public class OrdersServiceImpl implements OrdersService {
         Branch foundBranch = branchRepository.findById(ordersRequestDto.branchId()).orElseThrow(()-> new RuntimeException("Branch not found"));
         RestaurantTable foundRestaurantTable = restaurantTableRepository.findById(ordersRequestDto.tableId()).orElseThrow(()-> new RuntimeException("Table does not exist"));
 
+        int totalAmount = 0;
+        List<OrderItem> orderItems = new ArrayList<>();
+        for(OrderItemRequestDto itemDto : ordersRequestDto.orderItems()){
+            MenuItem menuItem = menuItemRepository.findById(itemDto.menuItemId()).orElseThrow(()-> new RuntimeException("Item does not exist"));
+            MenuItemVariant variant = menuItemVariantRepository.findById(itemDto.variantId()).orElseThrow(()-> new RuntimeException("Variant does not exist"));
+            int unitPrice = menuItem.getBasePrice() + variant.getExtraPrice();
+            int itemTotal = (unitPrice) * itemDto.quantity();
+            totalAmount += itemTotal;
+
+            OrderItem newOrderItem = OrderItem.builder()
+                    .menuItem(menuItem)
+                    .variant(variant)
+                    .quantity(itemDto.quantity())
+                    .unitPrice(unitPrice)
+                    .notes(itemDto.notes())
+                    .build();
+            orderItems.add(newOrderItem);
+        }
+
+        int finalAmount =  (totalAmount - ordersRequestDto.discount()) + ordersRequestDto.tax();
+
         Orders newOrder = Orders.builder()
                 .user(foundUser)
                 .branch(foundBranch)
                 .table(foundRestaurantTable)
                 .orderType(ordersRequestDto.orderType())
-                .totalAmount(ordersRequestDto.totalAmount())
+                .totalAmount(totalAmount)
                 .tax(ordersRequestDto.tax())
                 .discount(ordersRequestDto.discount())
-                .finalAmount((ordersRequestDto.totalAmount() - ordersRequestDto.discount()) + ordersRequestDto.tax())
+                .finalAmount(finalAmount)
                 .specialInstructions(ordersRequestDto.specialInstructions())
                 .deliveryAddress(ordersRequestDto.deliveryAddress())
                 .build();
 
         ordersRepository.save(newOrder);
+
+        for (OrderItem orderItem : orderItems){
+            orderItem.setOrder(newOrder);
+            orderItemRepository.save(orderItem);
+        }
         return OrdersResponseDtoMapper.toDto(newOrder,"Order created");
     }
 

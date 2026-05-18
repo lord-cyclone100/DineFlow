@@ -9,6 +9,6 @@ package com.cyclone.dineflow.dto.requestdto;
  */
 public record MenuItemVariantRequestDto(
         String name,
-        int extraPrice
+        Integer extraPrice
 )
 {}

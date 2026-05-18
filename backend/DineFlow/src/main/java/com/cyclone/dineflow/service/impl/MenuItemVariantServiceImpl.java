@@ -33,12 +33,13 @@ public class MenuItemVariantServiceImpl implements MenuItemVariantService {
         Optional<MenuItemVariant> foundVariant = menuItemVariantRepository.findByName(menuItemVariantRequestDto.name());
         Optional<MenuItem> foundMenuItem = menuItemRepository.findById(itemId);
 
-        if(foundVariant.isPresent() && foundMenuItem.isPresent()){
-            throw new RuntimeException("Variant already exists");
-        }
+//        if(foundVariant.isPresent() && foundMenuItem.isPresent()){
+//            throw new RuntimeException("Variant already exists");
+//        }
 
         MenuItemVariant menuItemVariant = MenuItemVariant.builder()
                 .name(menuItemVariantRequestDto.name())
+                .menuItem(foundMenuItem.get())
                 .extraPrice(menuItemVariantRequestDto.extraPrice())
                 .build();
         menuItemVariantRepository.save(menuItemVariant);

@@ -1234,6 +1234,239 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "menu item variant",
+      "item": [
+        {
+          "name": "create variant",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"medium\",\r\n    \"extraPrice\":80\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/items/09e3b4e2-e70c-4452-8c25-2f2806723156/variants",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "items",
+                "09e3b4e2-e70c-4452-8c25-2f2806723156",
+                "variants"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "menu item",
+      "item": [
+        {
+          "name": "create menu item",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Mutton Biriyani\",\r\n    \"description\": \"flavourful rice with potato piece and succulent mutton piece\",\r\n    \"basePrice\": 350,\r\n    \"menuCategory\": \"NONVEGETARIAN\",\r\n    \"preparationTimeInMinutes\": 40\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/categories/0a547d6d-c360-4f94-9c5c-6a373884cdf9/items",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "categories",
+                "0a547d6d-c360-4f94-9c5c-6a373884cdf9",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "item": [
+        {
+          "name": "place order",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"branchId\": \"0302c593-34a9-467e-9543-785dc225fbd0\",\r\n    \"tableId\":\"aa93fdfe-65d8-4a69-8a11-96f202161641\",\r\n    \"orderType\":\"DELIVERY\",\r\n    \"orderItems\":[\r\n        {\r\n            \"menuItemId\":\"12359fe7-ceeb-4a64-a1f4-3469562af78d\",\r\n            \"variantId\":\"a345e420-924f-48c2-bc00-89eff99e3c93\",\r\n            \"quantity\":2\r\n        },\r\n        {\r\n            \"menuItemId\":\"09e3b4e2-e70c-4452-8c25-2f2806723156\",\r\n            \"variantId\":\"dde65d45-fed1-4bfb-a1a3-54beaf1a1507\",\r\n            \"quantity\":2\r\n        }\r\n    ],\r\n    \"discount\":100,\r\n    \"tax\":162,\r\n    \"specialInstructions\":\"Make sure the food is less spicy\",\r\n    \"deliveryAddress\":\"Kolkata\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "order items",
+      "item": [
+        {
+          "name": "view all order items of an order",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/orders/830d6965-aeb2-4047-8414-b89d7e1730ea/items",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "orders",
+                "830d6965-aeb2-4047-8414-b89d7e1730ea",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "change status of order item",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8050/api/v1/order-items/50695ec8-8155-4133-b945-c654f2f65214/status?status=PREPARING",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8050",
+              "path": [
+                "api",
+                "v1",
+                "order-items",
+                "50695ec8-8155-4133-b945-c654f2f65214",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PREPARING",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [

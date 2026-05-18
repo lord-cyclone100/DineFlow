@@ -48,6 +48,7 @@ public class Orders {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private OrderStatus status = OrderStatus.PLACED;
 
     @Column(nullable = false)

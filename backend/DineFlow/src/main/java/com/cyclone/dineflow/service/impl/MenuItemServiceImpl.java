@@ -6,6 +6,7 @@ import com.cyclone.dineflow.dtomapper.MenuItemResponseDtoMapper;
 import com.cyclone.dineflow.entity.Category;
 import com.cyclone.dineflow.entity.MenuItem;
 import com.cyclone.dineflow.entity.data.MenuAvailability;
+import com.cyclone.dineflow.entity.data.MenuCategory;
 import com.cyclone.dineflow.repository.BranchRepository;
 import com.cyclone.dineflow.repository.CategoryRepository;
 import com.cyclone.dineflow.repository.MenuItemRepository;
@@ -43,6 +44,7 @@ public class MenuItemServiceImpl implements MenuItemService {
                 .name(menuItemRequestDto.name())
                 .description(menuItemRequestDto.description())
                 .category(category.get())
+                .menuCategory(menuItemRequestDto.menuCategory())
                 .basePrice(menuItemRequestDto.basePrice())
                 .preparationTimeInMinutes(menuItemRequestDto.preparationTimeInMinutes())
                 .build();
