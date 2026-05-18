@@ -3,6 +3,8 @@ package com.cyclone.dineflow.entity;
 import com.cyclone.dineflow.entity.data.PaymentMethod;
 import com.cyclone.dineflow.entity.data.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,6 +22,8 @@ import java.time.LocalTime;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Payment {
 
     @Id
