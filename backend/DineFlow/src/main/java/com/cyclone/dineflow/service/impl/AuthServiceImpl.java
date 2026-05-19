@@ -10,6 +10,9 @@ import com.cyclone.dineflow.entity.RefreshToken;
 import com.cyclone.dineflow.entity.Roles;
 import com.cyclone.dineflow.entity.User;
 import com.cyclone.dineflow.entity.data.UserRoles;
+import com.cyclone.dineflow.exceptions.custom.InvalidPasswordException;
+import com.cyclone.dineflow.exceptions.custom.UserAlreadyExistsException;
+import com.cyclone.dineflow.exceptions.custom.UserNotFoundException;
 import com.cyclone.dineflow.repository.RefreshTokenRepository;
 import com.cyclone.dineflow.repository.RolesRepository;
 import com.cyclone.dineflow.repository.UserRepository;
@@ -50,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<User> existingUser = userRepository.findByEmail(userRequestDto.email());
 
         if(existingUser.isPresent()){
-            throw new RuntimeException("User with email already exists");
+            throw new UserAlreadyExistsException(existingUser.get().getEmail());
         }
 
         Roles roles = rolesRepository.findByRoleName(UserRoles.CUSTOMER).orElseThrow(()->new RuntimeException("Role not found"));
@@ -69,9 +72,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponseDto loginUser(LoginRequestDto userRequestDto) {
-        User foundUser = userRepository.findByEmail(userRequestDto.email()).orElseThrow(() -> new RuntimeException("User not found"));
+        User foundUser = userRepository.findByEmail(userRequestDto.email()).orElseThrow(() -> new UserNotFoundException(userRequestDto.email()));
         if(!passwordEncoder.matches(userRequestDto.password(), foundUser.getPassword())){
-            throw new RuntimeException("Passwords don't match");
+            throw new InvalidPasswordException("Invalid Password");
         }
 
         List<String> userRoles = foundUser.getRoles().stream().map(role -> role.getRoleName().name()).toList();
@@ -97,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDto refreshUser(UserPrincipal principal) {
         String userId = principal.userId();
         List<String> userRoles = principal.roles();
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
         String accessToken = jwtUtil.buildAccessToken(foundUser.getId(),userRoles, TokenType.ACCESS);
         String refreshToken = jwtUtil.buildRefreshToken(foundUser.getId(),userRoles, TokenType.REFRESH);
 
@@ -117,7 +120,7 @@ public class AuthServiceImpl implements AuthService {
     public RegisterResponseDto getCurrentUser(UserPrincipal principal) {
         String userId = principal.userId();
 
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
         return UserResponseDtoMapper.toDto(foundUser);
     }
 
@@ -125,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
     public RegisterResponseDto updateCurrentUserDetails(UserPrincipal principal, RegisterRequestDto userRequestDto) {
         String userId = principal.userId();
 
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
 
         foundUser.setName(userRequestDto.name());
         foundUser.setEmail(userRequestDto.email());
@@ -140,7 +143,7 @@ public class AuthServiceImpl implements AuthService {
     public String changePassword(UserPrincipal principal, ChangePasswordRequestDto password) {
         String userId = principal.userId();
 
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
 
         foundUser.setPassword(passwordEncoder.encode(password.password()));
         userRepository.save(foundUser);
@@ -152,7 +155,7 @@ public class AuthServiceImpl implements AuthService {
     public String logoutUser(UserPrincipal principal) {
         String userId = principal.userId();
 
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
 
         refreshTokenRepository.deleteByUser(foundUser);
         return "Refresh Tokens deleted successfully";
