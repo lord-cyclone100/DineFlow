@@ -34,6 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 String token = authHeader.substring(7);
                 UserPrincipal principal =jwtUtil.extractUserFromToken(token);
+                log.info("Extracted jwt for user {} with roles {}",principal.userId(),principal.roles());
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(principal,null,principal.authorities());
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

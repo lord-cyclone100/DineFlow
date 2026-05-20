@@ -7,6 +7,7 @@ import com.cyclone.dineflow.dtomapper.ViewUserDtoMapper;
 import com.cyclone.dineflow.entity.Roles;
 import com.cyclone.dineflow.entity.User;
 import com.cyclone.dineflow.entity.data.UserStatus;
+import com.cyclone.dineflow.exceptions.custom.UserNotFoundException;
 import com.cyclone.dineflow.repository.RolesRepository;
 import com.cyclone.dineflow.repository.UserRepository;
 import com.cyclone.dineflow.service.UserService;
@@ -37,13 +38,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto fetchParticularUser(String id) {
-        User foundUser = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found!"));
+        User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
         return ViewUserDtoMapper.toDto(foundUser);
     }
 
     @Override
     public String updateUserStatus(String id, UserStatus userStatus) {
-        User foundUser = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found!"));
+        User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
         foundUser.setStatus(userStatus);
         userRepository.save(foundUser);
         return "Status updated";
@@ -51,14 +52,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String deleteUser(String id) {
-        User foundUser = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found!"));
+        User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
         userRepository.delete(foundUser);
         return "User Deleted";
     }
 
     @Override
     public ChangeRolesResponseDto changeUserRoles(String id, ChangeRolesRequestDto roleChangeArr) {
-        User foundUser = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found!"));
+        User foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
 
         if(roleChangeArr.roles() == null || roleChangeArr.roles().isEmpty()){
             throw new RuntimeException("At least one role is required");

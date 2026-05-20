@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * [Detailed description of the class's responsibility]
@@ -53,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<User> existingUser = userRepository.findByEmail(userRequestDto.email());
 
         if(existingUser.isPresent()){
-            throw new UserAlreadyExistsException(existingUser.get().getEmail());
+            throw new UserAlreadyExistsException("User not found with email " + existingUser.get().getEmail());
         }
 
         Roles roles = rolesRepository.findByRoleName(UserRoles.CUSTOMER).orElseThrow(()->new RuntimeException("Role not found"));
@@ -72,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponseDto loginUser(LoginRequestDto userRequestDto) {
-        User foundUser = userRepository.findByEmail(userRequestDto.email()).orElseThrow(() -> new UserNotFoundException(userRequestDto.email()));
+        User foundUser = userRepository.findByEmail(userRequestDto.email()).orElseThrow(() -> new UserNotFoundException("User not found with email " + userRequestDto.email()));
         if(!passwordEncoder.matches(userRequestDto.password(), foundUser.getPassword())){
             throw new InvalidPasswordException("Invalid Password");
         }
@@ -100,7 +99,7 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDto refreshUser(UserPrincipal principal) {
         String userId = principal.userId();
         List<String> userRoles = principal.roles();
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found with id " + userId));
         String accessToken = jwtUtil.buildAccessToken(foundUser.getId(),userRoles, TokenType.ACCESS);
         String refreshToken = jwtUtil.buildRefreshToken(foundUser.getId(),userRoles, TokenType.REFRESH);
 
@@ -120,7 +119,7 @@ public class AuthServiceImpl implements AuthService {
     public RegisterResponseDto getCurrentUser(UserPrincipal principal) {
         String userId = principal.userId();
 
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found with id " + userId));
         return UserResponseDtoMapper.toDto(foundUser);
     }
 
@@ -128,7 +127,7 @@ public class AuthServiceImpl implements AuthService {
     public RegisterResponseDto updateCurrentUserDetails(UserPrincipal principal, RegisterRequestDto userRequestDto) {
         String userId = principal.userId();
 
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found with id " + userId));
 
         foundUser.setName(userRequestDto.name());
         foundUser.setEmail(userRequestDto.email());
@@ -143,7 +142,7 @@ public class AuthServiceImpl implements AuthService {
     public String changePassword(UserPrincipal principal, ChangePasswordRequestDto password) {
         String userId = principal.userId();
 
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found with id " + userId));
 
         foundUser.setPassword(passwordEncoder.encode(password.password()));
         userRepository.save(foundUser);
@@ -155,7 +154,7 @@ public class AuthServiceImpl implements AuthService {
     public String logoutUser(UserPrincipal principal) {
         String userId = principal.userId();
 
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userRepository.findById(userId).get().getEmail()));
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found with id " + userId));
 
         refreshTokenRepository.deleteByUser(foundUser);
         return "Refresh Tokens deleted successfully";

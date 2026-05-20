@@ -9,6 +9,7 @@ import com.cyclone.dineflow.security.UserPrincipal;
 import com.cyclone.dineflow.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,21 +43,25 @@ public class AuthController {
     }
 
     @GetMapping("/auth/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<RegisterResponseDto> getCurrrentUser(@AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(authService.getCurrentUser(principal));
     }
 
     @PutMapping("/auth/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<RegisterResponseDto> updateCurrrentUserDetails(@AuthenticationPrincipal UserPrincipal principal, @RequestBody RegisterRequestDto userRequestDto) {
         return ResponseEntity.ok(authService.updateCurrentUserDetails(principal, userRequestDto));
     }
 
     @PatchMapping("/auth/changepassword")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> changePassword(@AuthenticationPrincipal UserPrincipal principal, @RequestBody ChangePasswordRequestDto password){
         return ResponseEntity.ok(authService.changePassword(principal, password));
     }
 
     @PostMapping("/auth/logout")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> logoutUser(@AuthenticationPrincipal UserPrincipal principal){
         return ResponseEntity.ok(authService.logoutUser(principal));
     }

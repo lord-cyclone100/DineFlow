@@ -4,6 +4,8 @@ import com.cyclone.dineflow.dto.requestdto.RestaurantRequestDto;
 import com.cyclone.dineflow.dto.responsedto.RestaurantResponseDto;
 import com.cyclone.dineflow.dtomapper.RestaurantResponseDtoMapper;
 import com.cyclone.dineflow.entity.Restaurant;
+import com.cyclone.dineflow.exceptions.custom.RestaurantAlreadyExistsException;
+import com.cyclone.dineflow.exceptions.custom.RestaurantNotFoundException;
 import com.cyclone.dineflow.repository.RestaurantRepository;
 import com.cyclone.dineflow.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         Optional<Restaurant> newRestaurant = restaurantRepository.findByName(restaurant.name());
 
         if(newRestaurant.isPresent()){
-            throw new RuntimeException("Restaurant already exists");
+            throw new RestaurantAlreadyExistsException(newRestaurant.get().getName());
         }
 
         Restaurant addingRestaurant = Restaurant.builder()
@@ -49,13 +51,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public RestaurantResponseDto getParticularRestaurant(String id) {
-        Restaurant foundRestaurant = restaurantRepository.findById(id).orElseThrow(()-> new RuntimeException("Restaurant not found"));
+        Restaurant foundRestaurant = restaurantRepository.findById(id).orElseThrow(()-> new RestaurantNotFoundException(id));
         return RestaurantResponseDtoMapper.toDto(foundRestaurant,null);
     }
 
     @Override
     public String updateRestaurant(String id, RestaurantRequestDto restaurant) {
-        Restaurant foundRestaurant = restaurantRepository.findById(id).orElseThrow(()-> new RuntimeException("Restaurant not found"));
+        Restaurant foundRestaurant = restaurantRepository.findById(id).orElseThrow(()-> new RestaurantNotFoundException(id));
         foundRestaurant.setName(restaurant.name());
         foundRestaurant.setCuisineType(restaurant.cuisineType());
         restaurantRepository.save(foundRestaurant);
@@ -64,7 +66,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public String deleteRestaurant(String id) {
-        Restaurant foundRestaurant = restaurantRepository.findById(id).orElseThrow(()-> new RuntimeException("Restaurant not found"));
+        Restaurant foundRestaurant = restaurantRepository.findById(id).orElseThrow(()-> new RestaurantNotFoundException(id));
         restaurantRepository.delete(foundRestaurant);
         return "Restaurant deleted successfully";
     }

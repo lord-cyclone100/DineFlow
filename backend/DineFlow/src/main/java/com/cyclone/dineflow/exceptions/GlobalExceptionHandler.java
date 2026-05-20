@@ -1,11 +1,10 @@
 package com.cyclone.dineflow.exceptions;
 
 import com.cyclone.dineflow.dto.exception.ErrorResponseDto;
-import com.cyclone.dineflow.exceptions.custom.InvalidPasswordException;
-import com.cyclone.dineflow.exceptions.custom.UserAlreadyExistsException;
-import com.cyclone.dineflow.exceptions.custom.UserNotFoundException;
+import com.cyclone.dineflow.exceptions.custom.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,6 +12,17 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(AccessDeniedException ex) {
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
@@ -40,6 +50,30 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserNotFoundException ex) {
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RestaurantAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleRestaurantAlreadyExistsException(RestaurantAlreadyExistsException ex) {
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleRestaurantNotFoundException(RestaurantNotFoundException ex) {
 
         ErrorResponseDto error = ErrorResponseDto.builder()
                 .status(HttpStatus.NOT_FOUND.value())

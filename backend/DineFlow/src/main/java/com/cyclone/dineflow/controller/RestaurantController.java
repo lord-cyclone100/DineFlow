@@ -6,6 +6,7 @@ import com.cyclone.dineflow.entity.Restaurant;
 import com.cyclone.dineflow.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,26 +26,31 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @PostMapping("/restaurants")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RestaurantResponseDto> createRestaurant(@RequestBody RestaurantRequestDto restaurant) {
         return ResponseEntity.ok(restaurantService.createRestaurant(restaurant));
     }
 
     @GetMapping("/restaurants")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants() {
         return ResponseEntity.ok(restaurantService.getAllRestaurants());
     }
 
     @GetMapping("/restaurants/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RestaurantResponseDto> getParticularRestaurant(@PathVariable String id) {
         return ResponseEntity.ok(restaurantService.getParticularRestaurant(id));
     }
 
     @PutMapping("/restaurants/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateRestaurant(@PathVariable String id, @RequestBody RestaurantRequestDto restaurant) {
         return ResponseEntity.ok(restaurantService.updateRestaurant(id, restaurant));
     }
 
     @DeleteMapping("/restaurants/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteRestaurant(@PathVariable String id) {
         return ResponseEntity.ok(restaurantService.deleteRestaurant(id));
     }
