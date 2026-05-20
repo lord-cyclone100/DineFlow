@@ -7,6 +7,8 @@ import com.cyclone.dineflow.entity.Branch;
 import com.cyclone.dineflow.entity.Category;
 import com.cyclone.dineflow.entity.Restaurant;
 import com.cyclone.dineflow.entity.data.CategoryActive;
+import com.cyclone.dineflow.exceptions.custom.CategoryAlreadyExistsException;
+import com.cyclone.dineflow.exceptions.custom.CategoryNotFoundException;
 import com.cyclone.dineflow.repository.BranchRepository;
 import com.cyclone.dineflow.repository.CategoryRepository;
 import com.cyclone.dineflow.service.CategoryService;
@@ -32,13 +34,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDto createCategory(String branchId, CategoryRequestDto categoryRequestDto) {
-        Optional<Branch> existingBranch = branchRepository.findById(branchId);
-        Optional<Category> existingCategory = categoryRepository.findByName(categoryRequestDto.name());
 
-        if(existingBranch.isPresent() && existingCategory.isPresent()){
-            throw new RuntimeException("Branch already exists");
+        List<Category> foundCategories = categoryRepository.findByBranchId(branchId);
+
+        for(Category category : foundCategories){
+            if(category.getName().equals(categoryRequestDto.name())){
+                throw new CategoryAlreadyExistsException(categoryRequestDto.name(), category.getBranch().getName());
+            }
         }
 
+        Optional<Branch> existingBranch = branchRepository.findById(branchId);
         Category category = Category.builder()
                 .branch(existingBranch.get())
                 .name(categoryRequestDto.name())
@@ -56,13 +61,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDto getParticularCategory(String id) {
-        Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
+        Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new CategoryNotFoundException(id));
         return CategoryResponseDtoMapper.toDto(existingCategory,null);
     }
 
     @Override
     public String updateParticularCategory(CategoryRequestDto categoryRequestDto, String id) {
-        Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
+        Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new CategoryNotFoundException(id));
         existingCategory.setName(categoryRequestDto.name());
         existingCategory.setDescription(categoryRequestDto.description());
         categoryRepository.save(existingCategory);
@@ -71,14 +76,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public String deleteParticularCategory(String id) {
-        Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
+        Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new CategoryNotFoundException(id));
         categoryRepository.delete(existingCategory);
         return "Category deleted successfully";
     }
 
     @Override
     public String toggleActiveParticularCategory(String id, String status) {
-        Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
+        Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new CategoryNotFoundException(id));
         existingCategory.setIsActive(CategoryActive.valueOf(status));
         categoryRepository.save(existingCategory);
         return "Status Changed";

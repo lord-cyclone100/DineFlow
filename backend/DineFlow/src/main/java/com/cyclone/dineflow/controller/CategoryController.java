@@ -5,6 +5,7 @@ import com.cyclone.dineflow.dto.responsedto.CategoryResponseDto;
 import com.cyclone.dineflow.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping("/branches/{branchId}/categories")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<CategoryResponseDto> createCategory(@PathVariable String branchId, @RequestBody CategoryRequestDto categoryRequestDto) {
         return ResponseEntity.ok(categoryService.createCategory(branchId, categoryRequestDto));
     }
@@ -39,16 +41,19 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> updateParticularCategory(@RequestBody CategoryRequestDto categoryRequestDto, @PathVariable String id) {
         return ResponseEntity.ok(categoryService.updateParticularCategory(categoryRequestDto, id));
     }
 
     @DeleteMapping("/categories/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> deleteParticularCategory(@PathVariable String id) {
         return ResponseEntity.ok(categoryService.deleteParticularCategory(id));
     }
 
     @PatchMapping("/categories/{id}/toggle-active")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> toggleActiveParticularCategory(@PathVariable String id, @RequestParam String status) {
         return ResponseEntity.ok(categoryService.toggleActiveParticularCategory(id, status));
     }

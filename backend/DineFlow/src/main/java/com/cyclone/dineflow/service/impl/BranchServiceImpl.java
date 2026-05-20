@@ -5,6 +5,8 @@ import com.cyclone.dineflow.dto.responsedto.BranchResponseDto;
 import com.cyclone.dineflow.dtomapper.BranchResponseDtoMapper;
 import com.cyclone.dineflow.entity.Branch;
 import com.cyclone.dineflow.entity.Restaurant;
+import com.cyclone.dineflow.exceptions.custom.BranchAlreadyExistsException;
+import com.cyclone.dineflow.exceptions.custom.BranchNotFoundException;
 import com.cyclone.dineflow.repository.BranchRepository;
 import com.cyclone.dineflow.repository.RestaurantRepository;
 import com.cyclone.dineflow.service.BranchService;
@@ -29,12 +31,16 @@ public class BranchServiceImpl implements BranchService {
     private final RestaurantRepository restaurantRepository;
     @Override
     public BranchResponseDto createRestaurantBranch(BranchRequestDto branchRequestDto, String restaurantId) {
-        Optional<Branch>existingBranch = branchRepository.findByName(branchRequestDto.name());
-        Optional<Restaurant>existingRestaurant = restaurantRepository.findById(restaurantId);
 
-        if(existingBranch.isPresent() && existingRestaurant.isPresent()){
-            throw new RuntimeException("Branch already exists");
+        List<Branch> requiredBranches = branchRepository.findByRestaurantId(restaurantId);
+
+        for(Branch branch:requiredBranches){
+            if(branch.getName().equals(branchRequestDto.name())){
+                throw new BranchAlreadyExistsException(branchRequestDto.name(),branch.getRestaurant().getName());
+            }
         }
+
+        Optional<Restaurant>existingRestaurant = restaurantRepository.findById(restaurantId);
         Branch branch = Branch.builder()
                 .restaurant(existingRestaurant.get())
                 .name(branchRequestDto.name())
@@ -56,13 +62,13 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchResponseDto getParticularBranchDetails(String id) {
-        Branch foundBranch = branchRepository.findById(id).orElseThrow(()-> new RuntimeException("Branch not found"));
+        Branch foundBranch = branchRepository.findById(id).orElseThrow(()-> new BranchNotFoundException(id));
         return BranchResponseDtoMapper.toDto(foundBranch,null);
     }
 
     @Override
     public String updateParticularBranchDetails(BranchRequestDto branch, String id) {
-        Branch foundBranch = branchRepository.findById(id).orElseThrow(()-> new RuntimeException("Branch not found"));
+        Branch foundBranch = branchRepository.findById(id).orElseThrow(()-> new BranchNotFoundException(id));
         foundBranch.setName(branch.name());
         foundBranch.setCity(branch.city());
         foundBranch.setOpenTime(branch.openTime());
@@ -76,7 +82,7 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public String deleteParticularBranch(String id) {
-        Branch foundBranch = branchRepository.findById(id).orElseThrow(()-> new RuntimeException("Branch not found"));
+        Branch foundBranch = branchRepository.findById(id).orElseThrow(()-> new BranchNotFoundException(id));
         branchRepository.delete(foundBranch);
         return "Branch deleted successfully";
     }
