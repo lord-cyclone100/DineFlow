@@ -131,4 +131,76 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(MenuItemAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleMenuItemAlreadyExistsException(MenuItemAlreadyExistsException ex) {
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MenuItemNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleMenuItemNotFoundException(MenuItemNotFoundException ex) {
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MenuItemVariantAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleMenuItemVariantAlreadyExistsException(MenuItemVariantAlreadyExistsException ex) {
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MenuItemVariantNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleMenuItemVariantNotFoundException(MenuItemVariantNotFoundException ex) {
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TableAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleTableAlreadyExistsException(TableAlreadyExistsException ex) {
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(TableNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleTableNotFoundException(TableNotFoundException ex) {
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }

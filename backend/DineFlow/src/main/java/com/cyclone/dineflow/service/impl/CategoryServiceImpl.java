@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDto createCategory(String branchId, CategoryRequestDto categoryRequestDto) {
 
-        List<Category> foundCategories = categoryRepository.findByBranchId(branchId);
+        List<Category> foundCategories = categoryRepository.findAllByBranchId(branchId);
 
         for(Category category : foundCategories){
             if(category.getName().equals(categoryRequestDto.name())){

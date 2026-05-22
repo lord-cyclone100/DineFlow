@@ -5,6 +5,7 @@ import com.cyclone.dineflow.dto.responsedto.RestaurantTableResponseDto;
 import com.cyclone.dineflow.service.RestaurantTableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +25,13 @@ public class RestaurantTableController {
     private final RestaurantTableService restaurantTableService;
 
     @PostMapping("/branches/{branchId}/tables")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<RestaurantTableResponseDto> createTable(@PathVariable String branchId, @RequestBody RestaurantTableRequestDto restaurantTableRequestDto) {
         return ResponseEntity.ok(restaurantTableService.createTable(branchId,restaurantTableRequestDto));
     }
 
     @GetMapping("/branches/{branchId}/tables")
+    @PreAuthorize("hasAnyRole('MANAGER','STAFF')")
     public ResponseEntity<List<RestaurantTableResponseDto>> getAllTablesOfABranch(@PathVariable String branchId, @RequestBody RestaurantTableRequestDto restaurantTableRequestDto) {
         return ResponseEntity.ok(restaurantTableService.getAllTablesOfABranch(branchId,restaurantTableRequestDto));
     }
@@ -39,21 +42,25 @@ public class RestaurantTableController {
     }
 
     @GetMapping("/tables/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER','STAFF')")
     public ResponseEntity<RestaurantTableResponseDto> getParticularTable(@PathVariable String tableId) {
         return ResponseEntity.ok(restaurantTableService.getParticularTable(tableId));
     }
 
     @PutMapping("/tables/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> updateParticularTable(@PathVariable String tableId, @RequestBody RestaurantTableRequestDto restaurantTableRequestDto) {
         return ResponseEntity.ok(restaurantTableService.updateParticularTable(tableId, restaurantTableRequestDto));
     }
 
     @DeleteMapping("/tables/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> deleteParticularTable(@PathVariable String tableId) {
         return ResponseEntity.ok(restaurantTableService.deleteParticularTable(tableId));
     }
 
     @PatchMapping("/tables/{id}/toggle-active")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> toggleParticularTable(@PathVariable String tableId) {
         return ResponseEntity.ok(restaurantTableService.toggleParticularTable(tableId));
     }

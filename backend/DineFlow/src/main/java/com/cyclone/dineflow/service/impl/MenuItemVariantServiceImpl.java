@@ -5,6 +5,8 @@ import com.cyclone.dineflow.dto.responsedto.MenuItemVariantResponseDto;
 import com.cyclone.dineflow.dtomapper.MenuItemVariantResponseDtoMapper;
 import com.cyclone.dineflow.entity.MenuItem;
 import com.cyclone.dineflow.entity.MenuItemVariant;
+import com.cyclone.dineflow.exceptions.custom.MenuItemVariantAlreadyExistsException;
+import com.cyclone.dineflow.exceptions.custom.MenuItemVariantNotFoundException;
 import com.cyclone.dineflow.repository.MenuItemRepository;
 import com.cyclone.dineflow.repository.MenuItemVariantRepository;
 import com.cyclone.dineflow.service.MenuItemVariantService;
@@ -30,13 +32,15 @@ public class MenuItemVariantServiceImpl implements MenuItemVariantService {
 
     @Override
     public MenuItemVariantResponseDto addVariant(MenuItemVariantRequestDto menuItemVariantRequestDto, String itemId) {
-        Optional<MenuItemVariant> foundVariant = menuItemVariantRepository.findByName(menuItemVariantRequestDto.name());
+        List<MenuItemVariant> foundVariant = menuItemVariantRepository.findAllByMenuItemId(itemId);
+
+        for(MenuItemVariant menuItemVariant : foundVariant){
+            if(menuItemVariant.getName().equals(menuItemVariantRequestDto.name())){
+                throw new MenuItemVariantAlreadyExistsException(menuItemVariant.getName(), menuItemVariant.getMenuItem().getName());
+            }
+        }
+
         Optional<MenuItem> foundMenuItem = menuItemRepository.findById(itemId);
-
-//        if(foundVariant.isPresent() && foundMenuItem.isPresent()){
-//            throw new RuntimeException("Variant already exists");
-//        }
-
         MenuItemVariant menuItemVariant = MenuItemVariant.builder()
                 .name(menuItemVariantRequestDto.name())
                 .menuItem(foundMenuItem.get())
@@ -54,7 +58,7 @@ public class MenuItemVariantServiceImpl implements MenuItemVariantService {
 
     @Override
     public String updateVariant(String variantId, MenuItemVariantRequestDto menuItemVariantRequestDto) {
-        MenuItemVariant foundVariant = menuItemVariantRepository.findById(variantId).orElseThrow(() -> new RuntimeException("Variant not found"));
+        MenuItemVariant foundVariant = menuItemVariantRepository.findById(variantId).orElseThrow(() -> new MenuItemVariantNotFoundException(variantId));
         foundVariant.setName(menuItemVariantRequestDto.name());
         foundVariant.setExtraPrice(menuItemVariantRequestDto.extraPrice());
         menuItemVariantRepository.save(foundVariant);
@@ -63,7 +67,7 @@ public class MenuItemVariantServiceImpl implements MenuItemVariantService {
 
     @Override
     public String deleteVariant(String variantId) {
-        MenuItemVariant foundVariant = menuItemVariantRepository.findById(variantId).orElseThrow(() -> new RuntimeException("Variant not found"));
+        MenuItemVariant foundVariant = menuItemVariantRepository.findById(variantId).orElseThrow(() -> new MenuItemVariantNotFoundException(variantId));
         menuItemVariantRepository.delete(foundVariant);
         return "Variant deleted successfully";
     }

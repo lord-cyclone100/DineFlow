@@ -5,6 +5,7 @@ import com.cyclone.dineflow.dto.responsedto.MenuItemResponseDto;
 import com.cyclone.dineflow.service.MenuItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,10 +24,11 @@ public class MenuItemController {
 
     private final MenuItemService menuItemService;
 
-        @PostMapping("/categories/{categoryId}/items")
-        public ResponseEntity<MenuItemResponseDto> createMenuItem(@RequestBody MenuItemRequestDto menuItemRequestDto, @PathVariable String categoryId) {
-            return ResponseEntity.ok(menuItemService.createMenuItem(menuItemRequestDto, categoryId));
-        }
+    @PostMapping("/categories/{categoryId}/items")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<MenuItemResponseDto> createMenuItem(@RequestBody MenuItemRequestDto menuItemRequestDto, @PathVariable String categoryId) {
+        return ResponseEntity.ok(menuItemService.createMenuItem(menuItemRequestDto, categoryId));
+    }
 
     @GetMapping("/branches/{branchId}/items")
     public ResponseEntity<List<MenuItemResponseDto>> getMenuItemsOfBranch(@PathVariable String branchId) {
@@ -44,16 +46,19 @@ public class MenuItemController {
     }
 
     @PutMapping("/items/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> updateParticularMenuItem(@RequestBody MenuItemRequestDto menuItemRequestDto, @PathVariable String menuItemId) {
         return ResponseEntity.ok(menuItemService.updateParticularMenuItem(menuItemRequestDto, menuItemId));
     }
 
     @DeleteMapping("/items/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> deleteMenuItem(@PathVariable String menuItemId) {
         return ResponseEntity.ok(menuItemService.deleteMenuItem(menuItemId));
     }
 
     @PatchMapping("/items/{id}/toggle-available")
+    @PreAuthorize("hasAnyRole('MANAGER','STAFF')")
     public ResponseEntity<String> toggleMenuItemAvailability(@PathVariable String id, @RequestParam String availability) {
         return ResponseEntity.ok(menuItemService.toggleMenuItemAvailability(id, availability));
     }

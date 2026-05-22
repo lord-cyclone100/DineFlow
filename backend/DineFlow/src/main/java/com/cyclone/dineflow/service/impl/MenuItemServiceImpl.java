@@ -7,6 +7,9 @@ import com.cyclone.dineflow.entity.Category;
 import com.cyclone.dineflow.entity.MenuItem;
 import com.cyclone.dineflow.entity.data.MenuAvailability;
 import com.cyclone.dineflow.entity.data.MenuCategory;
+import com.cyclone.dineflow.exceptions.custom.CategoryAlreadyExistsException;
+import com.cyclone.dineflow.exceptions.custom.MenuItemAlreadyExistsException;
+import com.cyclone.dineflow.exceptions.custom.MenuItemNotFoundException;
 import com.cyclone.dineflow.repository.BranchRepository;
 import com.cyclone.dineflow.repository.CategoryRepository;
 import com.cyclone.dineflow.repository.MenuItemRepository;
@@ -34,12 +37,21 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItemResponseDto createMenuItem(MenuItemRequestDto menuItemRequestDto, String categoryId) {
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        Optional<MenuItem> foundMenuItem = menuItemRepository.findByName(menuItemRequestDto.name());
 
-        if(category.isPresent() && foundMenuItem.isPresent()) {
-            throw new RuntimeException("Menu Item already exists");
+        List<MenuItem> foundMenuItem = menuItemRepository.findAllByCategoryId(categoryId);
+
+//        if(category.isPresent() && foundMenuItem.isPresent()) {
+//            throw new RuntimeException("Menu Item already exists");
+//        }
+
+        for(MenuItem menuItem : foundMenuItem){
+            if(menuItem.getName().equals(menuItemRequestDto.name())){
+                throw new MenuItemAlreadyExistsException(menuItemRequestDto.name(), menuItem.getCategory().getName(), menuItem.getCategory().getBranch().getName());
+            }
         }
+
+        Optional<Category> category = categoryRepository.findById(categoryId);
+
         MenuItem menuItem = MenuItem.builder()
                 .name(menuItemRequestDto.name())
                 .description(menuItemRequestDto.description())
@@ -66,13 +78,13 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItemResponseDto getParticularMenuItem(String menuItemId) {
-        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(()->new RuntimeException("Menu Item Not Found"));
+        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(()->new MenuItemNotFoundException(menuItemId));
         return MenuItemResponseDtoMapper.toDto(menuItem,null);
     }
 
     @Override
     public String updateParticularMenuItem(MenuItemRequestDto menuItemRequestDto, String menuItemId) {
-        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(()->new RuntimeException("Menu Item Not Found"));
+        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(()->new MenuItemNotFoundException(menuItemId));
         menuItem.setName(menuItemRequestDto.name());
         menuItem.setDescription(menuItemRequestDto.description());
         menuItem.setBasePrice(menuItemRequestDto.basePrice());
@@ -84,14 +96,14 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public String deleteMenuItem(String menuItemId) {
-        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(()->new RuntimeException("Menu Item Not Found"));
+        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(()->new MenuItemNotFoundException(menuItemId));
         menuItemRepository.delete(menuItem);
         return "Menu Item Deleted";
     }
 
     @Override
     public String toggleMenuItemAvailability(String menuItemId, String availability) {
-        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(()->new RuntimeException("Menu Item Not Found"));
+        MenuItem menuItem = menuItemRepository.findById(menuItemId).orElseThrow(()->new MenuItemNotFoundException(menuItemId));
         menuItem.setMenuAvailability(MenuAvailability.valueOf(availability));
         menuItemRepository.save(menuItem);
         return "Menu Item availability updated";

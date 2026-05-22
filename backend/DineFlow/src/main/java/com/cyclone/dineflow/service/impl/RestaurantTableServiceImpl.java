@@ -6,6 +6,8 @@ import com.cyclone.dineflow.dtomapper.RestaurantResponseDtoMapper;
 import com.cyclone.dineflow.dtomapper.RestaurantTableResponseDtoMapper;
 import com.cyclone.dineflow.entity.Branch;
 import com.cyclone.dineflow.entity.RestaurantTable;
+import com.cyclone.dineflow.exceptions.custom.TableAlreadyExistsException;
+import com.cyclone.dineflow.exceptions.custom.TableNotFoundException;
 import com.cyclone.dineflow.repository.BranchRepository;
 import com.cyclone.dineflow.repository.RestaurantTableRepository;
 import com.cyclone.dineflow.service.RestaurantTableService;
@@ -31,12 +33,17 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
 
     @Override
     public RestaurantTableResponseDto createTable(String branchId, RestaurantTableRequestDto restaurantTableRequestDto) {
-        Optional <RestaurantTable> foundTableNumber = restaurantTableRepository.findByTableNumber(restaurantTableRequestDto.tableNumber());
+
+        List<RestaurantTable> allTables = restaurantTableRepository.findAllByBranchId(branchId);
+
+        for(RestaurantTable restaurantTable : allTables){
+            if(restaurantTable.getTableNumber().equals(restaurantTableRequestDto.tableNumber())){
+                throw new TableAlreadyExistsException(restaurantTableRequestDto.tableNumber(), restaurantTable.getBranch().getName());
+            }
+        }
+
         Optional <Branch> foundBranch = branchRepository.findById(branchId);
 
-        if(foundTableNumber.isPresent() && foundBranch.isPresent()){
-            throw new RuntimeException("Restaurant table already exists");
-        }
         RestaurantTable restaurantTable = RestaurantTable.builder()
                 .branch(foundBranch.get())
                 .tableNumber(restaurantTableRequestDto.tableNumber())
@@ -61,20 +68,20 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
 
     @Override
     public RestaurantTableResponseDto getParticularTable(String tableId) {
-        RestaurantTable foundRestaurantTable = restaurantTableRepository.findById(tableId).orElseThrow(()-> new RuntimeException("Table not found"));
+        RestaurantTable foundRestaurantTable = restaurantTableRepository.findById(tableId).orElseThrow(()-> new TableNotFoundException(tableId));
         return RestaurantTableResponseDtoMapper.toDto(foundRestaurantTable,null);
     }
 
     @Override
     public String deleteParticularTable(String tableId) {
-        RestaurantTable foundRestaurantTable = restaurantTableRepository.findById(tableId).orElseThrow(()-> new RuntimeException("Table not found"));
+        RestaurantTable foundRestaurantTable = restaurantTableRepository.findById(tableId).orElseThrow(()-> new TableNotFoundException(tableId));
         restaurantTableRepository.delete(foundRestaurantTable);
         return "Table deleted successfully";
     }
 
     @Override
     public String updateParticularTable(String tableId, RestaurantTableRequestDto restaurantTableRequestDto) {
-        RestaurantTable foundRestaurantTable = restaurantTableRepository.findById(tableId).orElseThrow(()-> new RuntimeException("Table not found"));
+        RestaurantTable foundRestaurantTable = restaurantTableRepository.findById(tableId).orElseThrow(()-> new TableNotFoundException(tableId));
 
         foundRestaurantTable.setTableNumber(restaurantTableRequestDto.tableNumber());
         foundRestaurantTable.setCapacity(restaurantTableRequestDto.capacity());

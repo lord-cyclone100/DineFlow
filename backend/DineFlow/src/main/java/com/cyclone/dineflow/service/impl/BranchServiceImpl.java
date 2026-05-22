@@ -32,7 +32,7 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public BranchResponseDto createRestaurantBranch(BranchRequestDto branchRequestDto, String restaurantId) {
 
-        List<Branch> requiredBranches = branchRepository.findByRestaurantId(restaurantId);
+        List<Branch> requiredBranches = branchRepository.findAllByRestaurantId(restaurantId);
 
         for(Branch branch:requiredBranches){
             if(branch.getName().equals(branchRequestDto.name())){
