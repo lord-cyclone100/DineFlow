@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<User> existingUser = userRepository.findByEmail(userRequestDto.email());
 
         if(existingUser.isPresent()){
-            throw new UserAlreadyExistsException("User not found with email " + existingUser.get().getEmail());
+            throw new UserAlreadyExistsException(existingUser.get().getEmail());
         }
 
         Roles roles = rolesRepository.findByRoleName(UserRoles.CUSTOMER).orElseThrow(()->new RuntimeException("Role not found"));
