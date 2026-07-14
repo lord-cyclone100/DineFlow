@@ -1,7 +1,10 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { api } from "../../api/axios"
+import { AuthContext } from "../../auth/AuthContext"
 
 export const LoginForm = () => {
+
+  const { login } = useContext(AuthContext)
 
   const [formData, setFormData] = useState({
     email: "",
@@ -14,11 +17,25 @@ export const LoginForm = () => {
     setFormData((prev) =>({...prev, [name]: value}))
   }
 
+  const setCurrentUserDetails = async () => {
+  try {
+    const response = await api.get('/auth/me')
+    console.log(response.data);
+    login(response.data)
+  } catch (error) {
+    console.error("Failed to fetch user details:", error);
+  }
+}
+
+
   const handleFormSubmit = async (e) => {
     e.preventDefault()
     try{
       const response = await api.post('/auth/login', formData)
+      localStorage.setItem('accessToken',response.data.accessToken)
+      localStorage.setItem('refreshToken',response.data.refreshToken)
       console.log(response.data)
+      await setCurrentUserDetails()
     }
     catch(error){
       console.log(error.response.data.message)
@@ -38,6 +55,7 @@ export const LoginForm = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+      {/* <button onClick={setCurrentUserDetails}>Get Details</button> */}
     </>
   )
 }

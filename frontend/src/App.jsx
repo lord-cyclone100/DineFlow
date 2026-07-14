@@ -1,15 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
 import { AuthPage } from './pages/AuthPage'
+import { HomePage } from './pages/HomePage'
 
 export const App = () => {
 
+  const token = localStorage.getItem('accessToken')
+  console.log(token);
   return (
     <>
-      <AuthPage />
+      {token ? <HomePage /> : <AuthPage />}
     </>
   )
 }

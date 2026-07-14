@@ -6,7 +6,7 @@ export const AuthPage = () => {
 	const [tab, setTab] = useState('Register')
 
 	const handleTabClick = (e) => {
-		console.log(e.target.textContent)
+		// console.log(e.target.textContent)
 		setTab(e.target.textContent)
 	}
 	return (
