@@ -5,6 +5,7 @@ import { api } from "../api/axios"
 export const AuthProvider = ({children}) => {
   const [currentUser, setCurrentUser] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const login = (userDetails) => {
     setCurrentUser(userDetails)
@@ -16,7 +17,6 @@ export const AuthProvider = ({children}) => {
     setIsAuthenticated(false)
   }
 
-  // Inside AuthProvider.jsx:
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('accessToken');
@@ -25,9 +25,10 @@ export const AuthProvider = ({children}) => {
           const response = await api.get('/auth/me');
           login(response.data);
         } catch (err) {
-          logout(); // Token might be expired or invalid
+          logout();
         }
       }
+      setLoading(false)
     };
     fetchUser();
   }, []);
@@ -35,7 +36,7 @@ export const AuthProvider = ({children}) => {
   return(
     <>
       <AuthContext.Provider
-        value={{currentUser, isAuthenticated, login, logout}}
+        value={{currentUser, isAuthenticated, loading, login, logout}}
       >
         {children}
       </AuthContext.Provider>

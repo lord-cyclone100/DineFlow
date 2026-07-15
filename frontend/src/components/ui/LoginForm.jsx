@@ -1,10 +1,12 @@
 import { useContext, useState } from "react"
 import { api } from "../../api/axios"
 import { AuthContext } from "../../auth/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 export const LoginForm = () => {
 
   const { login } = useContext(AuthContext)
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     email: "",
@@ -22,6 +24,7 @@ export const LoginForm = () => {
     const response = await api.get('/auth/me')
     console.log(response.data);
     login(response.data)
+    navigate('/')
   } catch (error) {
     console.error("Failed to fetch user details:", error);
   }
