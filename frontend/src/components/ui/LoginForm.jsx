@@ -2,6 +2,7 @@ import { useContext, useState } from "react"
 import { api } from "../../api/axios"
 import { AuthContext } from "../../auth/AuthContext"
 import { useNavigate } from "react-router-dom"
+import { UpdateRolesModal } from "./UpdateRolesModal"
 
 export const LoginForm = () => {
 
@@ -64,7 +65,7 @@ export const LoginForm = () => {
         <p>or</p>
       </form>
       <button className="border p-1.5 bg-sky-700 text-white" onClick={handleGoogleLogin}>Login with Google</button>
-      {/* <button onClick={setCurrentUserDetails}>Get Details</button> */}
+      <UpdateRolesModal />
     </>
   )
 }

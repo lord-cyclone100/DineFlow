@@ -10,7 +10,6 @@ export const SeeAllUsersSection = () => {
     const fetchAllUsers = async() => {
       try {
         const response = await api.get('/admin/users')
-        console.log(response.data);
         setUserList(response.data)
       } catch (error) {
         

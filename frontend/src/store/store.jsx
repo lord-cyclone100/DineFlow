@@ -4,3 +4,8 @@ export const useChangePasswordToggle = create((set) => ({
     changePasswordModalShow: false,
     setChangePasswordModalShow: (val) => set({ changePasswordModalShow: val }),
 }))
+
+export const useChangeUserRolesToggle = create((set) => ({
+    changeUserRolesModalShow: false,
+    setChangeUserRolesModalShow: (val) => set({ changeUserRolesModalShow: val }),
+}))

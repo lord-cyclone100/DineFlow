@@ -9,7 +9,7 @@ export const Header = () => {
 	return(
 		<div className="border-2">
 			<div className="flex-1">
-				<a className="btn btn-ghost text-xl">MOVIE</a>
+				<a className="btn btn-ghost text-xl">DINEFLOW</a>
 			</div>
 			<div className="flex-none">
 				<ul className="flex items-center gap-20 text-rose-500">

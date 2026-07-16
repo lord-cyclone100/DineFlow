@@ -12,9 +12,7 @@ export const AdminPanelUserCard = (props) => {
         <p>{phoneNumber}</p>
         <p>{status}</p>
         <div className="flex gap-2">
-          <button className="p-1.5 bg-teal-600 text-white">
-            {status === 'ACTIVE' ? 'SUSPEND' : 'ACTIVE'}
-          </button>
+          
           <NavLink to={`/admin/users/${userId}`}>
             <button className="p-1.5 bg-teal-600 text-white">
               View User Details
