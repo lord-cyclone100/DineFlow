@@ -9,6 +9,8 @@ import { AboutPage } from './pages/AboutPage'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { ProfilePage } from './pages/ProfilePage'
 import { OAuth2Redirect } from './pages/OAuth2Redirect'
+import { AdminPanel } from './pages/AdminPanel'
+import { ParticularUserSection } from './components/ui/ParticularUserSection'
 
 export const App = () => {
 
@@ -47,6 +49,14 @@ export const App = () => {
             {
               path:'/profile',
               element:<ProfilePage />
+            },
+            {
+              path:'/admin',
+              element:<AdminPanel />
+            },
+            {
+              path:'/admin/users/:userId',
+              element:<ParticularUserSection />
             }
           ]
         },
