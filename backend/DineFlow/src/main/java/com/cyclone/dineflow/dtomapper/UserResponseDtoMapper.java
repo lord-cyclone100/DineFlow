@@ -17,6 +17,7 @@ public class UserResponseDtoMapper {
         List<String> roles = user.getRoles().stream().map(role -> role.getRoleName().name()).toList();
         String provider = user.getProvider().name();
         return new RegisterResponseDto(
+                user.getId(),
                 user.getName(),
                 user.getEmail(),
                 user.getPhoneNumber(),

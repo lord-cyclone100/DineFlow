@@ -7,6 +7,8 @@ import { AppLayout } from './components/layout/AppLayout'
 import { ContactPage } from './pages/ContactPage'
 import { AboutPage } from './pages/AboutPage'
 import { ProtectedRoute } from './auth/ProtectedRoute'
+import { ProfilePage } from './pages/ProfilePage'
+import { OAuth2Redirect } from './pages/OAuth2Redirect'
 
 export const App = () => {
 
@@ -24,6 +26,10 @@ export const App = () => {
           element:<AuthPage />
         },
         {
+          path:'/oauth2/redirect',
+          element:<OAuth2Redirect />
+        },
+        {
           element:<ProtectedRoute />,
           children:[
             {
@@ -37,6 +43,10 @@ export const App = () => {
             {
               path:'/about',
               element:<AboutPage />
+            },
+            {
+              path:'/profile',
+              element:<ProfilePage />
             }
           ]
         },

@@ -11,9 +11,9 @@ export const AppLayout = () => {
 	}
 	return(
 		<>
-			<Header/>
+			{/* <Header/> */}
 			<Outlet/>
-			<Footer/>
+			{/* <Footer/> */}
 		</>
 	)
 }

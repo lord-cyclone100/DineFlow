@@ -13,6 +13,7 @@ import java.util.List;
  * @since 20-04-2026
  */
 public record RegisterResponseDto(
+        String userId,
         String name,
         String email,
         String phoneNumber,

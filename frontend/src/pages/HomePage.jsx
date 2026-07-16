@@ -7,10 +7,7 @@ export const HomePage = () => {
   return(
     <>
       <div>
-        <h1>Home Page</h1>
-        <p>{currentUser.name}</p>
-        <p>{currentUser.email}</p>
-        <p>{currentUser.phoneNumber}</p>
+        Welcome to Dineflow
       </div>
     </>
   )

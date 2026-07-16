@@ -94,7 +94,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 //        String redirectUrl = frontendUrl + "/oauth2/callback?token=" + accessToken;
 
-        String frontendRedirectUrl = "http://localhost:3000/oauth2/redirect?accessToken="
+        String frontendRedirectUrl = "http://localhost:5173/oauth2/redirect?accessToken="
                 + accessToken + "&refreshToken=" + refreshToken;
         getRedirectStrategy().sendRedirect(request, response, frontendRedirectUrl);
     }

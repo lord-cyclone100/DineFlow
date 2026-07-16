@@ -18,6 +18,7 @@ public class ViewUserDtoMapper {
         List<String> roles = user.getRoles().stream().map(role -> role.getRoleName().name()).toList();
         String provider = user.getProvider().name();
         return new UserResponseDto(
+                user.getId(),
                 user.getName(),
                 user.getEmail(),
                 user.getPhoneNumber(),

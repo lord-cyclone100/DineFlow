@@ -45,19 +45,25 @@ export const LoginForm = () => {
     }
   }
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8050/oauth2/authorization/google"
+  }
+
   return(
     <>
       <form action="" onSubmit={handleFormSubmit}>
         <div>
           <label htmlFor="email">Email : </label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange}/>
+          <input type="email" name="email" value={formData.email} onChange={handleChange} className="border"/>
         </div>
         <div>
           <label htmlFor="password">Password : </label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange}/>
+          <input type="password" name="password" value={formData.password} onChange={handleChange} className="border"/>
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" className="border p-1.5 bg-sky-700 text-white">Login</button>
+        <p>or</p>
       </form>
+      <button className="border p-1.5 bg-sky-700 text-white" onClick={handleGoogleLogin}>Login with Google</button>
       {/* <button onClick={setCurrentUserDetails}>Get Details</button> */}
     </>
   )

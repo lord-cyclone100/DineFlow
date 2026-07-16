@@ -7,16 +7,17 @@ export const Header = () => {
     };
   }
 	return(
-		<div className="navbar bg-base-100 shadow-sm">
+		<div className="border-2">
 			<div className="flex-1">
 				<a className="btn btn-ghost text-xl">MOVIE</a>
 			</div>
 			<div className="flex-none">
-				<ul className="menu menu-horizontal px-1">
-					<li><NavLink to="/" style={getNavLinkColor}>Home</NavLink></li>
+				<ul className="flex items-center gap-20 text-rose-500">
+					<li><NavLink to="/" className=''>Home</NavLink></li>
 					{/* <li><NavLink to="/movie" style={getNavLinkColor}>Movies</NavLink></li> */}
-					<li><NavLink to="/contact" style={getNavLinkColor}>Contact</NavLink></li>
-					<li><NavLink to="/about" style={getNavLinkColor}>About</NavLink></li>
+					<li><NavLink to="/contact">Contact</NavLink></li>
+					<li><NavLink to="/about" >About</NavLink></li>
+					<li><NavLink to="/profile" >Profile</NavLink></li>
 				</ul>
 			</div>
 		</div>
