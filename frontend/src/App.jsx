@@ -11,6 +11,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { OAuth2Redirect } from './pages/OAuth2Redirect'
 import { AdminPanel } from './pages/AdminPanel'
 import { ParticularUserSection } from './components/ui/ParticularUserSection'
+import { ParticularRestaurant } from './components/ui/ParticularRestaurant'
 
 export const App = () => {
 
@@ -57,6 +58,10 @@ export const App = () => {
             {
               path:'/admin/users/:userId',
               element:<ParticularUserSection />
+            },
+            {
+              path:'/restaurants/:restaurantId',
+              element:<ParticularRestaurant />
             }
           ]
         },

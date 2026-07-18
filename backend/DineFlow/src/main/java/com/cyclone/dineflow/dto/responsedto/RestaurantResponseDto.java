@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record RestaurantResponseDto(
+        String restaurantId,
         String name,
         String cuisineType,
         String message

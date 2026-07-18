@@ -17,6 +17,7 @@ import java.util.List;
 public class RestaurantResponseDtoMapper {
     public static RestaurantResponseDto toDto(Restaurant restaurant, String message) {
         return new RestaurantResponseDto(
+                restaurant.getId(),
                 restaurant.getName(),
                 restaurant.getCuisineType(),
                 message
